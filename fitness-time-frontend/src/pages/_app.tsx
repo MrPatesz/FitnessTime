@@ -2,9 +2,14 @@ import "../styles/globals.css";
 import type { AppProps } from "next/app";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Head from "next/head";
-import Link from "next/link";
+import { SessionProvider } from "next-auth/react";
+import { Session } from "next-auth";
+import MenuComponent from "../components/MenuComponent";
 
-function App({ Component, pageProps }: AppProps) {
+export default function App({
+  Component,
+  pageProps,
+}: AppProps<{ session: Session }>) {
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
@@ -13,18 +18,18 @@ function App({ Component, pageProps }: AppProps) {
       },
     },
   });
+
   return (
-    <QueryClientProvider client={queryClient}>
+    <>
       <Head>
         <title>Fitness Time</title>
       </Head>
-      <div className="d-flex flex-row">
-        <Link href={`/events`}>Events</Link>
-        <Link href={`/users`}>Users</Link>
-      </div>
-      <Component {...pageProps} />
-    </QueryClientProvider>
+      <SessionProvider session={pageProps.session}>
+        <MenuComponent />
+        <QueryClientProvider client={queryClient}>
+          <Component {...pageProps} />
+        </QueryClientProvider>
+      </SessionProvider>
+    </>
   );
 }
-
-export default App;

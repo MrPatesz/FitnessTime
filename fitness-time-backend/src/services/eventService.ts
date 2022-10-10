@@ -22,6 +22,7 @@ const create = async (eventDto: EventDto): Promise<EventDto | null> => {
   if (eventDto.from > eventDto.to) return null;
 
   try {
+    // TODO ownerId shall be caller's id
     const event = await Event.create({ ...eventDto, id: undefined });
     return toEventDto(event);
   } catch (error) {
