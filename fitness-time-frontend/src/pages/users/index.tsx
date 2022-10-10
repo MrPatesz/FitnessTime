@@ -1,25 +1,31 @@
 import Link from "next/link";
 import React from "react";
 import { QueryComponent } from "../../components/QueryComponent";
+import LoginDto from "../../models/loginDto";
+import AuthService from "../../services/AuthService";
 import UserService from "../../services/UserService";
 
 export default function UsersPage() {
   const userService = UserService();
+  const authService = AuthService();
   const usersQuery = userService.useGetAll();
   const deleteUser = userService.useDelete();
-  const createUser = userService.useCreate();
+
+  const mockUser: LoginDto = {
+    username: "MrPatesz",
+    password: "leaked_pw",
+  };
 
   return (
     <>
+      <button onClick={() => authService.register(mockUser)}>Create</button>
       <button
-        onClick={() =>
-          createUser.mutate({
-            username: "MrPatesz",
-            password: "leaked_pw",
-          })
-        }
+        onClick={async () => {
+          const jwt = await authService.login(mockUser);
+          console.log(jwt);
+        }}
       >
-        Create
+        Login
       </button>
       <QueryComponent resourceName={"Users"} query={usersQuery}>
         <ul>

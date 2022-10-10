@@ -32,6 +32,8 @@ const create = async (eventDto: EventDto): Promise<EventDto | null> => {
 const update = async (eventDto: EventDto): Promise<EventDto | null> => {
   if (eventDto.from > eventDto.to) return null;
 
+  // TODO check if caller owns the event or not!
+
   const entity = await Event.findByPk(eventDto.id);
   if (!entity) return null;
 
@@ -40,6 +42,8 @@ const update = async (eventDto: EventDto): Promise<EventDto | null> => {
 };
 
 const deleteSingle = async (id: number): Promise<boolean> => {
+  // TODO check if caller owns the event or not!
+
   const entity = await Event.findByPk(id);
   const result = await entity?.destroy();
   return result !== undefined;
