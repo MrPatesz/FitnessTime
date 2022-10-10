@@ -1,9 +1,9 @@
 import { User } from "../models/userModel";
 import { Event } from "../models/eventModel";
-import { sequelize } from "./database";
 import UserDto from "../dtos/userDto";
+import { Sequelize } from "sequelize";
 
-export const initDatabase = () => {
+export const initDatabase = (sequelize: Sequelize) => {
   Event.belongsTo(User, {
     as: "owner",
     foreignKey: "ownerId",
