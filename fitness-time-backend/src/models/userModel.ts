@@ -17,10 +17,6 @@ export const User = sequelize.define("user", {
     type: Sequelize.STRING,
     allowNull: false,
   },
-  passwordSalt: {
-    type: Sequelize.STRING,
-    allowNull: false,
-  },
 
   // NULLABLE properties
   introduction: {

@@ -23,7 +23,7 @@ const create = async (req: Request, res: Response) => {
   if (user) {
     return res.status(200).json(user);
   } else {
-    return res.status(404).send();
+    return res.status(400).send();
   }
 };
 

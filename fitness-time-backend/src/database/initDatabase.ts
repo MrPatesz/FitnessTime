@@ -16,7 +16,6 @@ export const initDatabase = () => {
         username: "DefaultUser",
         introduction: null,
         passwordHash: "pw_hash",
-        passwordSalt: "pw_salt",
       });
     })
     .then((user) => {

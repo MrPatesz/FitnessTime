@@ -1,6 +1,7 @@
 import LoginDto from "../dtos/loginDto";
 import UserDto, { toUserDto } from "../dtos/userDto";
 import { User } from "../models/userModel";
+import bcrypt from "bcrypt";
 
 const getAll = async (): Promise<UserDto[]> => {
   const entities = await User.findAll({
@@ -16,14 +17,13 @@ const getSingle = async (id: number): Promise<UserDto | null> => {
 };
 
 const create = async (user: LoginDto): Promise<UserDto | null> => {
-  const passwordHash = user.password + "_hash"; // TODO
-  const passwordSalt = user.password + "_salt"; // TODO
+  const saltRounds = 10;
+  const passwordHash = await bcrypt.hash(user.password, saltRounds);
 
   try {
     const entity = await User.create({
       username: user.username,
       passwordHash,
-      passwordSalt,
     });
     if (!entity) return null;
     else return toUserDto(entity);
