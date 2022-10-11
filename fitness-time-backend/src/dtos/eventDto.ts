@@ -1,4 +1,5 @@
-import { Model } from "sequelize";
+import { Event } from "../models/eventModel";
+import { User } from "../models/userModel";
 import DtoBase from "./dtoBase";
 import UserDto, { toUserDto } from "./userDto";
 
@@ -14,11 +15,10 @@ export default interface EventDto extends DtoBase {
   limit: number | null;
   price: number | null;
   equipment: string | null;
-  // participants: UserDto[];
+  participants: UserDto[];
 }
 
-export const toEventDto = (eventModel: Model<any, any>): EventDto => {
-  const event = eventModel as unknown as EventDto;
+export const toEventDto = (event: Event): EventDto => {
   return {
     id: event.id,
     ownerId: event.ownerId,
@@ -31,8 +31,9 @@ export const toEventDto = (eventModel: Model<any, any>): EventDto => {
     limit: event.limit,
     price: event.price,
     equipment: event.equipment,
-    owner: event.owner
-      ? toUserDto(event.owner as unknown as Model<any, any>)
-      : undefined,
+    owner: event.owner ? toUserDto(event.owner) : undefined,
+    participants: event.participants
+      ? event.participants.map((p: User) => toUserDto(p))
+      : [],
   };
 };

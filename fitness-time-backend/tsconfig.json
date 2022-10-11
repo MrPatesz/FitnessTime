@@ -14,7 +14,7 @@
     "noUncheckedIndexedAccess": true,
     "skipLibCheck": true,
 
-    "strictPropertyInitialization": true,
+    "strictPropertyInitialization": false,
     "useUnknownInCatchVariables": true
   }
 }

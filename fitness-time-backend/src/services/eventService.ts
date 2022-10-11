@@ -21,7 +21,10 @@ const getAllOwned = async (ownerId: number): Promise<EventDto[]> => {
 
 const getSingle = async (id: number): Promise<EventDto | null> => {
   const entity = await Event.findByPk(id, {
-    include: [{ model: User, as: "owner" }],
+    include: [
+      { model: User, as: "owner" },
+      { model: User, as: "participants" },
+    ],
   });
   if (!entity) return null;
   else return toEventDto(entity);
@@ -61,10 +64,28 @@ const update = async (
 
 const deleteSingle = async (id: number, callerId: number): Promise<boolean> => {
   const entity = await Event.findByPk(id);
-  if (!entity || (entity as any).ownerId !== callerId) return false;
+  if (!entity || entity.ownerId !== callerId) return false;
 
   const result = await entity.destroy();
   return result !== undefined;
 };
 
-export default { getAll, getAllOwned, getSingle, create, update, deleteSingle };
+const participate = async (id: number, callerId: number): Promise<boolean> => {
+  const entity = await Event.findByPk(id);
+  const user = await User.findByPk(callerId);
+  if (!entity || !user || entity.ownerId === callerId) return false;
+
+  const result = await (entity as any).addParticipant(user);
+
+  return !!result;
+};
+
+export default {
+  getAll,
+  getSingle,
+  create,
+  update,
+  deleteSingle,
+  getAllOwned,
+  participate,
+};

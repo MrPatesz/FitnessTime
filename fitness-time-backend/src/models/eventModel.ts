@@ -1,49 +1,75 @@
-import * as Sequelize from "sequelize";
-import { sequelize } from "../database/database";
+import { DataTypes, Sequelize } from "sequelize";
+import { Model } from "sequelize";
+import { User } from "./userModel";
 
-export const Event = sequelize.define("event", {
-  id: {
-    type: Sequelize.INTEGER,
-    autoIncrement: true,
-    allowNull: false,
-    primaryKey: true,
-  },
-  name: {
-    type: Sequelize.STRING,
-    allowNull: false,
-  },
-  location: {
-    type: Sequelize.STRING,
-    allowNull: false,
-  },
-  from: {
-    type: Sequelize.DATE,
-    allowNull: false,
-  },
-  to: {
-    type: Sequelize.DATE,
-    allowNull: false,
-  },
-  recurring: {
-    type: Sequelize.BOOLEAN,
-    allowNull: false,
-  },
+export class Event extends Model {
+  declare id: number;
+  ownerId: number;
+  owner?: User;
+  name: string;
+  location: string;
+  from: Date;
+  to: Date;
+  recurring: boolean;
+  description: string | null;
+  limit: number | null;
+  price: number | null;
+  equipment: string | null;
+  participants?: User[];
+}
 
-  // NULLABLE properties
-  description: {
-    type: Sequelize.STRING,
-    allowNull: true,
-  },
-  limit: {
-    type: Sequelize.INTEGER,
-    allowNull: true,
-  },
-  price: {
-    type: Sequelize.FLOAT,
-    allowNull: true,
-  },
-  equipment: {
-    type: Sequelize.STRING,
-    allowNull: true,
-  },
-});
+export const initEvent = (sequelize: Sequelize) => {
+  Event.init(
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        allowNull: false,
+        primaryKey: true,
+      },
+      ownerId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      location: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      from: {
+        type: DataTypes.DATE,
+        allowNull: false,
+      },
+      to: {
+        type: DataTypes.DATE,
+        allowNull: false,
+      },
+      recurring: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+      },
+
+      // NULLABLE properties
+      description: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      limit: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+      },
+      price: {
+        type: DataTypes.FLOAT,
+        allowNull: true,
+      },
+      equipment: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+    },
+    { sequelize, tableName: "events" }
+  );
+};

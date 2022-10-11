@@ -1,4 +1,4 @@
-import { Model } from "sequelize";
+import { User } from "../models/userModel";
 import DtoBase from "./dtoBase";
 
 export default interface UserDto extends DtoBase {
@@ -6,8 +6,7 @@ export default interface UserDto extends DtoBase {
   introduction: string | null;
 }
 
-export const toUserDto = (userModel: Model<any, any>): UserDto => {
-  const user = userModel as unknown as UserDto;
+export const toUserDto = (user: User): UserDto => {
   return {
     id: user.id,
     username: user.username,

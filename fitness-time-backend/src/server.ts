@@ -8,12 +8,11 @@ import authRoutes from "./routes/authRoute";
 import { initDatabase } from "./database/initDatabase";
 import passport from "passport";
 import initPassport from "./auth/authentication";
-import { sequelize } from "./database/database";
 import addLogging from "./middlewares/logging";
 import addErrorHandling from "./middlewares/errorHandling";
 import addResponseHeaders from "./middlewares/responseHeaders";
 
-initDatabase(sequelize);
+initDatabase();
 initPassport(passport);
 
 const app = express();

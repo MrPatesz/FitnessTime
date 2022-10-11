@@ -9,6 +9,7 @@ export default function EventsPage() {
   const eventsQuery = eventService.useGetAll();
   const deleteEvent = eventService.useDelete();
   const createEvent = eventService.useCreate();
+  const participate = eventService.useParticipate();
 
   return (
     <>
@@ -20,6 +21,9 @@ export default function EventsPage() {
           {eventsQuery.data?.map((event) => (
             <li key={event.id}>
               <Link href={`/events/${event.id}`}>{event.name}</Link>
+              <button onClick={() => participate.mutate(event.id)}>
+                Participate
+              </button>
               <button onClick={() => deleteEvent.mutate(event.id)}>
                 Delete
               </button>

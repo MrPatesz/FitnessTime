@@ -1,26 +1,38 @@
-import * as Sequelize from "sequelize";
-import { sequelize } from "../database/database";
+import { DataTypes, Sequelize } from "sequelize";
+import { Model } from "sequelize";
 
-export const User = sequelize.define("user", {
-  id: {
-    type: Sequelize.INTEGER,
-    autoIncrement: true,
-    allowNull: false,
-    primaryKey: true,
-  },
-  username: {
-    type: Sequelize.STRING,
-    unique: true,
-    allowNull: false,
-  },
-  passwordHash: {
-    type: Sequelize.STRING,
-    allowNull: false,
-  },
+export class User extends Model {
+  declare id: number;
+  username: string;
+  passwordHash: string;
+  introduction: string | null;
+}
 
-  // NULLABLE properties
-  introduction: {
-    type: Sequelize.STRING,
-    allowNull: true,
-  },
-});
+export const initUser = (sequelize: Sequelize) => {
+  User.init(
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        allowNull: false,
+        primaryKey: true,
+      },
+      username: {
+        type: DataTypes.STRING,
+        unique: true,
+        allowNull: false,
+      },
+      passwordHash: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+
+      // NULLABLE properties
+      introduction: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+    },
+    { sequelize, timestamps: true, updatedAt: false, tableName: "users" }
+  );
+};

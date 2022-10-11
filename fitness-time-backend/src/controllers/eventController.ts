@@ -69,4 +69,25 @@ const deleteSingle = async (req: Request, res: Response) => {
   }
 };
 
-export default { getAll, getAllOwned, getSingle, create, update, deleteSingle };
+const participate = async (req: Request, res: Response) => {
+  const callerId = getCallerId(req);
+  const id = getPathId(req);
+
+  const result = await eventService.participate(id, callerId);
+
+  if (result) {
+    return res.status(200).send();
+  } else {
+    return res.status(400).send();
+  }
+};
+
+export default {
+  getAll,
+  getSingle,
+  create,
+  update,
+  deleteSingle,
+  getAllOwned,
+  participate,
+};

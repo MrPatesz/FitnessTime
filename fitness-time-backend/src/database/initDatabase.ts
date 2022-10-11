@@ -1,12 +1,32 @@
-import { User } from "../models/userModel";
-import { Event } from "../models/eventModel";
-import UserDto from "../dtos/userDto";
-import { Sequelize } from "sequelize";
+import { initUser, User } from "../models/userModel";
+import { Event, initEvent } from "../models/eventModel";
+import { sequelize } from "../database/database";
+import { initParticipation } from "../models/participationModel";
 
-export const initDatabase = (sequelize: Sequelize) => {
+export const initDatabase = () => {
+  initEvent(sequelize);
+  initUser(sequelize);
+  initParticipation(sequelize);
+
+  User.hasMany(Event, {
+    as: "ownedEvents",
+    foreignKey: "ownerId",
+  });
   Event.belongsTo(User, {
     as: "owner",
     foreignKey: "ownerId",
+    onDelete: "CASCADE",
+  });
+
+  Event.belongsToMany(User, {
+    through: "participations",
+    as: "participants",
+    foreignKey: "userId",
+  });
+  User.belongsToMany(Event, {
+    through: "participations",
+    as: "participatedEvents",
+    foreignKey: "eventId",
   });
 
   sequelize
@@ -18,16 +38,26 @@ export const initDatabase = (sequelize: Sequelize) => {
         passwordHash: "pw_hash",
       });
     })
+    .then(() => {
+      return User.create({
+        username: "DefaultUser2",
+        introduction: null,
+        passwordHash: "pw_hash2",
+      });
+    })
     .then((user) => {
-      const userDto = user as unknown as UserDto;
       return Event.create({
-        ownerId: userDto.id,
+        ownerId: user.id,
         name: "Full body workout",
         location: "4%",
         from: new Date(),
         to: new Date(),
         recurring: true,
       });
+    })
+    .then(async (event) => {
+      const user = await User.findByPk(1);
+      return (event as any).addParticipant(user);
     })
     .then(() => console.log("Database initialized"))
     .catch((err) => console.log(err.message));

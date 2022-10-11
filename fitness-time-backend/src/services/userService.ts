@@ -36,8 +36,6 @@ const deleteSingle = async (id: number, callerId: number): Promise<boolean> => {
 
   const entity = await User.findByPk(id);
 
-  // TODO delete user's events
-
   const result = await entity?.destroy();
   return result !== undefined;
 };

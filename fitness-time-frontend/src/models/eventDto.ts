@@ -13,7 +13,7 @@ export default interface EventDto extends DtoBase {
   limit: number | null;
   price: number | null;
   equipment: string | null;
-  // participants: UserDto[];
+  participants: UserDto[];
 }
 
 export const defaultEventDto: EventDto = {
@@ -29,4 +29,5 @@ export const defaultEventDto: EventDto = {
   limit: null,
   price: null,
   equipment: null,
+  participants: [],
 };
