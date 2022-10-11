@@ -35,7 +35,7 @@ const login = async (user: LoginDto): Promise<string | null> => {
   if (!jwtSecret) return null;
 
   const authToken: AuthToken = { userId: (entity as any).id };
-  const jsonWebToken = jwt.sign(authToken, jwtSecret);
+  const jsonWebToken = jwt.sign(authToken, jwtSecret, { expiresIn: "12h" });
   return jsonWebToken;
 };
 

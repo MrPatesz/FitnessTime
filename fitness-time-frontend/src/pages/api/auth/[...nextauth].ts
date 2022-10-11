@@ -5,6 +5,7 @@ import AuthService from "../../../services/AuthService";
 export const authOptions: NextAuthOptions = {
   session: {
     strategy: "jwt",
+    maxAge: 12 * 60 * 60, // 12 hours
   },
   providers: [
     CredentialProvider({
