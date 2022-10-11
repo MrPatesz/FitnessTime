@@ -1,14 +1,28 @@
 import { Request, Response } from "express";
 import EventDto from "../dtos/eventDto";
+import UserDto from "../dtos/userDto";
 import eventService from "../services/eventService";
+
+const getCallerId = (req: Request): number => (req.user as UserDto).id;
+const getPathId = (req: Request): number => parseInt(req.params.id ?? "");
+const getEventDto = (req: Request): EventDto => req.body;
 
 const getAll = async (_req: Request, res: Response) => {
   const events = await eventService.getAll();
   return res.status(200).json(events);
 };
 
+const getAllOwned = async (req: Request, res: Response) => {
+  const callerId = getCallerId(req);
+  const events = await eventService.getAllOwned(callerId);
+  return res.status(200).json(events);
+};
+
 const getSingle = async (req: Request, res: Response) => {
-  const event = await eventService.getSingle(parseInt(req.params.id ?? ""));
+  const id = getPathId(req);
+
+  const event = await eventService.getSingle(id);
+
   if (event) {
     return res.status(200).json(event);
   } else {
@@ -17,8 +31,11 @@ const getSingle = async (req: Request, res: Response) => {
 };
 
 const create = async (req: Request, res: Response) => {
-  const eventDto = req.body as EventDto;
-  const event = await eventService.create(eventDto);
+  const callerId = getCallerId(req);
+  const eventDto = getEventDto(req);
+
+  const event = await eventService.create(eventDto, callerId);
+
   if (event) {
     return res.status(200).json(event);
   } else {
@@ -27,8 +44,11 @@ const create = async (req: Request, res: Response) => {
 };
 
 const update = async (req: Request, res: Response) => {
-  const eventDto = req.body as EventDto;
-  const result = await eventService.update(eventDto);
+  const callerId = getCallerId(req);
+  const eventDto = getEventDto(req);
+
+  const result = await eventService.update(eventDto, callerId);
+
   if (result) {
     return res.status(200).json(result);
   } else {
@@ -37,7 +57,11 @@ const update = async (req: Request, res: Response) => {
 };
 
 const deleteSingle = async (req: Request, res: Response) => {
-  const result = await eventService.deleteSingle(parseInt(req.params.id ?? ""));
+  const callerId = getCallerId(req);
+  const id = getPathId(req);
+
+  const result = await eventService.deleteSingle(id, callerId);
+
   if (result) {
     return res.status(200).send();
   } else {
@@ -45,4 +69,4 @@ const deleteSingle = async (req: Request, res: Response) => {
   }
 };
 
-export default { getAll, getSingle, create, update, deleteSingle };
+export default { getAll, getAllOwned, getSingle, create, update, deleteSingle };

@@ -14,9 +14,7 @@ export default function UsersPage() {
         {usersQuery.data?.map((event) => (
           <li key={event.id}>
             <Link href={`/users/${event.id}`}>{event.username}</Link>
-            <button onClick={() => deleteUser.mutate(event.id)} disabled>
-              Delete
-            </button>
+            <button onClick={() => deleteUser.mutate(event.id)}>Delete</button>
           </li>
         ))}
       </ul>

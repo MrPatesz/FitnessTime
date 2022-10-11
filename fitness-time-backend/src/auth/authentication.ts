@@ -10,7 +10,7 @@ export default function initPassport(passport: PassportStatic) {
         jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
         secretOrKey: process.env.JWT_SECRET,
       },
-      (jwt: AuthToken, done: any /*TODO type*/) => {
+      (jwt: AuthToken, done: (err: any, user?: any) => void) => {
         return User.findByPk(jwt.userId)
           .then((user) => done(null, user))
           .catch((err) => done(err));

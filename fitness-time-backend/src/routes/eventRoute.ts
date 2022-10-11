@@ -5,6 +5,8 @@ const router = express.Router();
 
 router.get("/", controller.getAll);
 
+router.get("/owned", controller.getAllOwned);
+
 router.get("/:id", controller.getSingle);
 
 router.post("/", controller.create);

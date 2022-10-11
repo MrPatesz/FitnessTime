@@ -14,11 +14,14 @@ const getSingle = async (id: number): Promise<UserDto | null> => {
   else return toUserDto(entity);
 };
 
-const update = async (userDto: UserDto): Promise<UserDto | null> => {
+const update = async (
+  userDto: UserDto,
+  callerId: number
+): Promise<UserDto | null> => {
+  if (callerId !== userDto.id) return null;
+
   const entity = await User.findByPk(userDto.id);
   if (!entity) return null;
-
-  // TODO check if caller is the updated user or not!
 
   try {
     entity.update({ ...userDto });
@@ -28,10 +31,13 @@ const update = async (userDto: UserDto): Promise<UserDto | null> => {
   }
 };
 
-const deleteSingle = async (id: number): Promise<boolean> => {
-  // TODO check if caller owns the event or not!
+const deleteSingle = async (id: number, callerId: number): Promise<boolean> => {
+  if (callerId !== id) return false;
 
   const entity = await User.findByPk(id);
+
+  // TODO delete user's events
+
   const result = await entity?.destroy();
   return result !== undefined;
 };
