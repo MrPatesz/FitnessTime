@@ -5,19 +5,23 @@ import Head from "next/head";
 import { SessionProvider } from "next-auth/react";
 import { Session } from "next-auth";
 import MenuComponent from "../components/MenuComponent";
+import { useState } from "react";
 
 export default function App({
   Component,
   pageProps,
 }: AppProps<{ session: Session }>) {
-  const queryClient = new QueryClient({
-    defaultOptions: {
-      queries: {
-        // refetchOnWindowFocus: false,
-        retry: false,
-      },
-    },
-  });
+  const [queryClient] = useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            refetchOnWindowFocus: false,
+            retry: false,
+          },
+        },
+      })
+  );
 
   return (
     <>
