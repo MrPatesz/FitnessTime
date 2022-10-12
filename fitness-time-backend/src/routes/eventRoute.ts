@@ -3,18 +3,18 @@ import controller from "../controllers/eventController";
 
 const router = express.Router();
 
+router.get("/owned", controller.getAllOwned);
+
 router.get("/", controller.getAll);
 
 router.get("/:id", controller.getSingle);
 
 router.post("/", controller.create);
 
+router.post("/:id/participate", controller.participate);
+
 router.put("/:id", controller.update);
 
 router.delete("/:id", controller.deleteSingle);
-
-router.get("/owned", controller.getAllOwned);
-
-router.post("/:id/participate", controller.participate);
 
 export default router;
