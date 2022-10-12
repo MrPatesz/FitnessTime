@@ -1,36 +1,51 @@
+import { Button, Affix, ActionIcon, Modal, Stack, Group } from "@mantine/core";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 import { QueryComponent } from "../../components/QueryComponent";
 import { defaultEventDto } from "../../models/eventDto";
 import EventService from "../../services/EventService";
+import { IconPlus } from "@tabler/icons";
 
-export default function EventsPage() {
+export default function MyEventsPage() {
+  const [openCreate, setOpenCreate] = useState(false);
+
   const eventService = EventService();
-  const eventsQuery = eventService.useGetAll();
+  const eventsQuery = eventService.useGetAllOwned();
   const deleteEvent = eventService.useDelete();
   const createEvent = eventService.useCreate();
-  const participate = eventService.useParticipate();
 
   return (
     <>
-      <button onClick={() => createEvent.mutate(defaultEventDto)}>
-        Create
-      </button>
       <QueryComponent resourceName={"Events"} query={eventsQuery}>
-        <ul>
+        <Stack>
           {eventsQuery.data?.map((event) => (
-            <li key={event.id}>
+            <Group key={event.id}>
               <Link href={`/events/${event.id}`}>{event.name}</Link>
-              <button onClick={() => participate.mutate(event.id)}>
-                Participate
-              </button>
-              <button onClick={() => deleteEvent.mutate(event.id)}>
+              <Button onClick={() => deleteEvent.mutate(event.id)}>
                 Delete
-              </button>
-            </li>
+              </Button>
+            </Group>
           ))}
-        </ul>
+        </Stack>
       </QueryComponent>
+      <Modal
+        opened={openCreate}
+        onClose={() => setOpenCreate(false)}
+        title="Create Event"
+      >
+        <Button onClick={() => createEvent.mutate(defaultEventDto)}>
+          Create
+        </Button>
+      </Modal>
+      <Affix position={{ bottom: 20, right: 20 }}>
+        <ActionIcon
+          variant="filled"
+          size="xl"
+          onClick={() => setOpenCreate(true)}
+        >
+          <IconPlus />
+        </ActionIcon>
+      </Affix>
     </>
   );
 }

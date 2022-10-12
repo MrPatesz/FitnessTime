@@ -1,3 +1,4 @@
+import { Loader } from "@mantine/core";
 import { UseQueryResult } from "@tanstack/react-query";
 import React from "react";
 import DtoBase from "../models/dtoBase";
@@ -14,10 +15,8 @@ export const QueryComponent: React.FunctionComponent<{
         <div>An error occurred while fetching {resourceName}!</div>
       ) : query.data ? (
         children
-      ) : query.isFetching ? (
-        <div>Loading...</div>
       ) : (
-        <></>
+        query.isFetching && <Loader />
       )}
     </>
   );

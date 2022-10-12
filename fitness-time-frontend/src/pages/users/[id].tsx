@@ -1,3 +1,4 @@
+import { Button, TextInput, Text, Stack } from "@mantine/core";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { QueryComponent } from "../../components/QueryComponent";
@@ -30,13 +31,17 @@ export default function UserDetailsPage() {
 
   return (
     <QueryComponent resourceName={"User Details"} query={userDetailsQuery}>
-      <h1>{userDetailsQuery.data?.username}</h1>
-      <input
-        value={introduction}
-        onChange={(event) => setIntroduction(event.currentTarget.value)}
-      />
-      <h3>{JSON.stringify(userDetailsQuery.data)}</h3>
-      <button onClick={updateCall}>Update</button>
+      <Stack>
+        <Text weight="bold" size="xl">
+          {userDetailsQuery.data?.username}
+        </Text>
+        <TextInput
+          value={introduction}
+          onChange={(event) => setIntroduction(event.currentTarget.value)}
+        />
+        <Text>{JSON.stringify(userDetailsQuery.data)}</Text>
+        <Button onClick={updateCall}>Update</Button>
+      </Stack>
     </QueryComponent>
   );
 }

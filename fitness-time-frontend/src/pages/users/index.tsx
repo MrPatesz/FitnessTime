@@ -1,3 +1,4 @@
+import { Group, Stack } from "@mantine/core";
 import Link from "next/link";
 import React from "react";
 import { QueryComponent } from "../../components/QueryComponent";
@@ -6,18 +7,16 @@ import UserService from "../../services/UserService";
 export default function UsersPage() {
   const userService = UserService();
   const usersQuery = userService.useGetAll();
-  const deleteUser = userService.useDelete();
 
   return (
     <QueryComponent resourceName={"Users"} query={usersQuery}>
-      <ul>
+      <Stack>
         {usersQuery.data?.map((event) => (
-          <li key={event.id}>
+          <Group key={event.id}>
             <Link href={`/users/${event.id}`}>{event.username}</Link>
-            <button onClick={() => deleteUser.mutate(event.id)}>Delete</button>
-          </li>
+          </Group>
         ))}
-      </ul>
+      </Stack>
     </QueryComponent>
   );
 }

@@ -1,4 +1,4 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import EventDto from "../models/eventDto";
@@ -20,10 +20,23 @@ export default function EventService() {
   const useParticipate = () => {
     // TODO data: {eventId: id, status: true/false}
     return useMutation(
-      (id: number | string | undefined) =>
-        axios.post(`${apiUrl}/${id}/participate`, undefined, config),
+      ({ status, id }: { status: boolean; id: number | string | undefined }) =>
+        axios.post(`${apiUrl}/${id}/participate`, { status }, config),
       {
         onSuccess: () => queryClient.invalidateQueries([apiPostFix]),
+      }
+    );
+  };
+
+  const useGetAllOwned = () => {
+    return useQuery<EventDto[]>(
+      [apiPostFix],
+      () =>
+        axios
+          .get<EventDto[]>(`${apiUrl}/owned`, config)
+          .then((res) => res.data),
+      {
+        enabled: !!session,
       }
     );
   };
@@ -33,5 +46,6 @@ export default function EventService() {
   return {
     ...crudService,
     useParticipate,
+    useGetAllOwned,
   };
 }
