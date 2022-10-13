@@ -25,30 +25,26 @@ export const ApplicationShell: React.FunctionComponent<{
     },
   });
 
-  const getNavLink = (
-    label: string,
-    route: string,
-    icon: JSX.Element
-  ): JSX.Element => (
-    <Link href={route} passHref>
-      <NavLink
-        component="a"
-        label={label}
-        icon={icon}
-        active={router.route === route}
-      />
-    </Link>
-  );
-
   return (
     <AppShell
       hidden={!session}
       navbar={
         <Navbar width={{ base: 200 }} p="xs">
-          {getNavLink("Calendar", "/calendar", <IconCalendarEvent size={16} />)}
-          {getNavLink("Feed", "/feed", <IconNews size={16} />)}
-          {getNavLink("My Events", "/events", <IconAdjustments size={16} />)}
-          {getNavLink("Users", "/users", <IconUsers size={16} />)}
+          {[
+            { label: "Calendar", route: "/calendar", icon: IconCalendarEvent },
+            { label: "Feed", route: "/feed", icon: IconNews },
+            { label: "My Events", route: "/events", icon: IconAdjustments },
+            { label: "Users", route: "/users", icon: IconUsers },
+          ].map((link) => (
+            <Link href={link.route} passHref key={link.label}>
+              <NavLink
+                component="a"
+                label={link.label}
+                icon={<link.icon size={16} />}
+                active={router.route === link.route}
+              />
+            </Link>
+          ))}
         </Navbar>
       }
       header={
