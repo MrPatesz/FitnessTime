@@ -23,14 +23,18 @@ export default function EventService() {
       ({ status, id }: { status: boolean; id: number | string | undefined }) =>
         axios.post(`${apiUrl}/${id}/participate`, { status }, config),
       {
-        onSuccess: () => queryClient.invalidateQueries([apiPostFix]),
+        onSuccess: () =>
+          queryClient.invalidateQueries({
+            predicate: (query) =>
+              (query.queryKey[0] as string).includes(apiPostFix),
+          }),
       }
     );
   };
 
   const useGetAllOwned = () => {
     return useQuery<EventDto[]>(
-      [apiPostFix],
+      [`${apiPostFix}_owned`],
       () =>
         axios
           .get<EventDto[]>(`${apiUrl}/owned`, config)

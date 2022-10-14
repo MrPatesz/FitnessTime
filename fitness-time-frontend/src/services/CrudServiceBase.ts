@@ -14,6 +14,12 @@ export default function CrudServiceBase<R extends DtoBase>(apiPostFix: string) {
     },
   };
 
+  const invalidateQueries = () => {
+    queryClient.invalidateQueries({
+      predicate: (query) => (query.queryKey[0] as string).includes(apiPostFix),
+    });
+  };
+
   const useGetAll = () => {
     return useQuery<R[]>(
       [apiPostFix],
@@ -39,7 +45,7 @@ export default function CrudServiceBase<R extends DtoBase>(apiPostFix: string) {
       (newResource: R) =>
         axios.post<R>(apiUrl, newResource, config).then((res) => res.data),
       {
-        onSuccess: () => queryClient.invalidateQueries([apiPostFix]),
+        onSuccess: () => invalidateQueries(),
       }
     );
   };
@@ -51,7 +57,7 @@ export default function CrudServiceBase<R extends DtoBase>(apiPostFix: string) {
           .put<R>(`${apiUrl}/${newResource.id}`, newResource, config)
           .then((res) => res.data),
       {
-        onSuccess: () => queryClient.invalidateQueries([apiPostFix]),
+        onSuccess: () => invalidateQueries(),
       }
     );
   };
@@ -61,7 +67,7 @@ export default function CrudServiceBase<R extends DtoBase>(apiPostFix: string) {
       (id: number | string | undefined) =>
         axios.delete(`${apiUrl}/${id}`, config),
       {
-        onSuccess: () => queryClient.invalidateQueries([apiPostFix]),
+        onSuccess: () => invalidateQueries(),
       }
     );
   };
