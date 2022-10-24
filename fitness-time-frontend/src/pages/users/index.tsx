@@ -13,7 +13,9 @@ export default function UsersPage() {
       <Stack>
         {usersQuery.data?.map((event) => (
           <Group key={event.id}>
-            <Link href={`/users/${event.id}`}>{event.username}</Link>
+            <Link href={"/users/[id]"} as={`/users/${event.id}`}>
+              {event.username}
+            </Link>
           </Group>
         ))}
       </Stack>

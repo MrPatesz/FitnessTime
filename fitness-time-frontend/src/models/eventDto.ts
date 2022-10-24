@@ -18,10 +18,10 @@ export default interface EventDto extends DtoBase {
 
 export const defaultEventDto: EventDto = {
   id: 0,
-  ownerId: 1,
+  ownerId: 0,
   owner: undefined,
-  name: "name",
-  location: "location",
+  name: "",
+  location: "",
   from: new Date(),
   to: new Date(),
   recurring: false,
