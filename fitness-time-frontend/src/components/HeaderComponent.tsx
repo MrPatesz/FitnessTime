@@ -1,19 +1,30 @@
 import React from "react";
 import { signOut } from "next-auth/react";
-import { Button, Text, Group } from "@mantine/core";
+import { Button, Group, Title, Text } from "@mantine/core";
+import Link from "next/link";
 
 export const HeaderComponent: React.FunctionComponent<{
   username: string | undefined;
 }> = ({ username }) => {
   return (
     <Group align="center" position="apart">
-      <Text weight="bold" size="xl">
-        Fitness Time
-      </Text>
+      <Title order={2}>Fitness Time</Title>
 
       <Group>
-        <Text size="lg">{username}</Text>
-        <Button onClick={() => signOut({ callbackUrl: "/welcome" })}>
+        <Link href="/profile">
+          <Text
+            component="a"
+            sx={{ cursor: "pointer" }}
+            size="lg"
+            weight="bold"
+          >
+            {username}
+          </Text>
+        </Link>
+        <Button
+          variant="light"
+          onClick={() => signOut({ callbackUrl: "/welcome" })}
+        >
           Logout
         </Button>
       </Group>
