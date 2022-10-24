@@ -11,6 +11,7 @@
   "author": "Patrik Ángyán",
   "license": "ISC",
   "dependencies": {
+    "@daypilot/daypilot-lite-react": "^3.10.1",
     "@emotion/react": "^11.10.4",
     "@mantine/core": "^5.5.5",
     "@mantine/dates": "^5.5.5",
