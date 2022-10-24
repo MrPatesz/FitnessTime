@@ -3,6 +3,8 @@ import controller from "../controllers/userController";
 
 const router = express.Router();
 
+router.get("/profile", controller.getProfile);
+
 router.get("/", controller.getAll);
 
 router.get("/:id", controller.getSingle);

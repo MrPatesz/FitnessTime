@@ -72,8 +72,14 @@ const deleteSingle = async (req: Request, res: Response) => {
 const participate = async (req: Request, res: Response) => {
   const callerId = getCallerId(req);
   const id = getPathId(req);
+  const { status } = req.body as { status: boolean };
 
-  const result = await eventService.participate(id, callerId);
+  let result = false;
+  if (status) {
+    result = await eventService.participate(id, callerId);
+  } else {
+    result = await eventService.removeParticipation(id, callerId);
+  }
 
   if (result) {
     return res.status(200).send();

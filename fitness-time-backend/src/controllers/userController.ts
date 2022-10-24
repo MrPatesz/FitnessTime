@@ -23,6 +23,18 @@ const getSingle = async (req: Request, res: Response) => {
   }
 };
 
+const getProfile = async (req: Request, res: Response) => {
+  const callerId = getCallerId(req);
+
+  const user = await service.getSingle(callerId);
+
+  if (user) {
+    return res.status(200).json(user);
+  } else {
+    return res.status(404).send();
+  }
+};
+
 const update = async (req: Request, res: Response) => {
   const callerId = getCallerId(req);
   const userDto = getUserDto(req);
@@ -49,4 +61,4 @@ const deleteSingle = async (req: Request, res: Response) => {
   }
 };
 
-export default { getAll, getSingle, update, deleteSingle };
+export default { getAll, getSingle, update, deleteSingle, getProfile };

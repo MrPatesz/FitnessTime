@@ -80,6 +80,19 @@ const participate = async (id: number, callerId: number): Promise<boolean> => {
   return !!result;
 };
 
+const removeParticipation = async (
+  id: number,
+  callerId: number
+): Promise<boolean> => {
+  const entity = await Event.findByPk(id);
+  const user = await User.findByPk(callerId);
+  if (!entity || !user || entity.ownerId === callerId) return false;
+
+  const result = await (entity as any).removeParticipant(user);
+
+  return !!result;
+};
+
 export default {
   getAll,
   getSingle,
@@ -88,4 +101,5 @@ export default {
   deleteSingle,
   getAllOwned,
   participate,
+  removeParticipation,
 };
