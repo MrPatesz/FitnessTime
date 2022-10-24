@@ -3,41 +3,41 @@ import { DatePicker, TimeInput } from "@mantine/dates";
 import dayjs from "dayjs";
 import React, { useEffect, useState } from "react";
 
+const calculateDateTime = (date: Date, time: Date): Date => {
+  const hour = dayjs(time).hour();
+  const minute = dayjs(time).minute();
+  const dateAndTime = dayjs(date).hour(hour).minute(minute);
+
+  return dateAndTime.toDate();
+};
+
 export const DateTimePicker: React.FunctionComponent<{
-  // TODO default values for from and to
+  from: Date;
+  to: Date;
   setFrom: (newDate: Date) => void;
   setTo: (newDate: Date) => void;
-}> = ({ setFrom, setTo }) => {
-  const now = new Date();
-  const nowPlusOneHour = dayjs(now)
-    .hour(dayjs(now).hour() + 1)
-    .toDate();
-
-  const [date, setDate] = useState<Date>(now);
-  const [fromTime, setFromTime] = useState<Date>(now);
-  const [toTime, setToTime] = useState<Date>(nowPlusOneHour);
+}> = ({ from, to, setFrom, setTo }) => {
+  const [date, setDate] = useState<Date>(from);
+  const [fromTime, setFromTime] = useState<Date>(from);
+  const [toTime, setToTime] = useState<Date>(to);
 
   useEffect(() => {
     setFrom(calculateDateTime(date, fromTime));
     setTo(calculateDateTime(date, toTime));
   }, [date, fromTime, setFrom, setTo, toTime]);
 
-  const calculateDateTime = (date: Date, time: Date): Date => {
-    const hour = dayjs(time).hour();
-    const minute = dayjs(time).minute();
-    const dateAndTime = dayjs(date).hour(hour).minute(minute);
-
-    return dateAndTime.toDate();
-  };
-
   return (
     <Group spacing="xs">
       <DatePicker
         label="On"
         value={date}
-        onChange={(event) => setDate(event ?? now)}
+        onChange={(event) => {
+          if (event) {
+            setDate(event);
+          }
+        }}
         clearable={false}
-        minDate={now}
+        minDate={new Date()}
       />
       <TimeInput
         label="From"

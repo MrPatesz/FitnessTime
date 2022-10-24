@@ -1,28 +1,20 @@
-import { Button, Stack, Group } from "@mantine/core";
-import Link from "next/link";
+import { SimpleGrid } from "@mantine/core";
 import React from "react";
+import { EventCard } from "../components/event/EventCard";
 import { QueryComponent } from "../components/QueryComponent";
 import EventService from "../services/EventService";
 
 export default function FeedPage() {
   const eventService = EventService();
   const eventsQuery = eventService.useGetAll();
-  const participate = eventService.useParticipate();
 
   return (
     <QueryComponent resourceName="Events" query={eventsQuery}>
-      <Stack>
+      <SimpleGrid cols={3}>
         {eventsQuery.data?.map((event) => (
-          <Group key={event.id}>
-            <Link href={`/events/${event.id}`}>{event.name}</Link>
-            <Button
-              onClick={() => participate.mutate({ status: true, id: event.id })}
-            >
-              Participate
-            </Button>
-          </Group>
+          <EventCard event={event} key={event.id} />
         ))}
-      </Stack>
+      </SimpleGrid>
     </QueryComponent>
   );
 }
