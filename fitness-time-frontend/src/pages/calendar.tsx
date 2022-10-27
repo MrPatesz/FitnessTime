@@ -17,10 +17,6 @@ export default function CalendarPage() {
 
   return (
     <>
-      <DayPilotNavigator
-        selectMode="week"
-        onTimeRangeSelected={(args: { day: Date }) => setStartDate(args.day)}
-      />
       <QueryComponent resourceName="Calendar" query={eventsQuery}>
         <DayPilotCalendar
           viewType="Week"
@@ -52,6 +48,10 @@ export default function CalendarPage() {
           })}
         />
       </QueryComponent>
+      <DayPilotNavigator
+        selectMode="week"
+        onTimeRangeSelected={(args: { day: Date }) => setStartDate(args.day)}
+      />
     </>
   );
 }

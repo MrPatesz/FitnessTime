@@ -6,7 +6,11 @@ import React, { useEffect, useState } from "react";
 const calculateDateTime = (date: Date, time: Date): Date => {
   const hour = dayjs(time).hour();
   const minute = dayjs(time).minute();
-  const dateAndTime = dayjs(date).hour(hour).minute(minute);
+  const dateAndTime = dayjs(date)
+    .hour(hour)
+    .minute(minute)
+    .second(0)
+    .millisecond(0);
 
   return dateAndTime.toDate();
 };
@@ -24,7 +28,7 @@ export const DateTimePicker: React.FunctionComponent<{
   useEffect(() => {
     setFrom(calculateDateTime(date, fromTime));
     setTo(calculateDateTime(date, toTime));
-  }, [date, fromTime, setFrom, setTo, toTime]);
+  }, [date, fromTime, toTime, setFrom, setTo]);
 
   return (
     <Group spacing="xs">
