@@ -24,7 +24,14 @@ export const CreateEventDialog: React.FunctionComponent<{
         event={event}
         setEvent={setEvent}
         submitButton={
-          <Button onClick={() => useCreate.mutateAsync(event).then(onClose)}>
+          <Button
+            onClick={() =>
+              useCreate.mutateAsync(event).then(() => {
+                onClose();
+                setEvent(defaultEventDto);
+              })
+            }
+          >
             Create
           </Button>
         }

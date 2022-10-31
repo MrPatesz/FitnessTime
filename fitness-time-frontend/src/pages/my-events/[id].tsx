@@ -1,8 +1,9 @@
-import { Text, Affix, ActionIcon, Stack } from "@mantine/core";
+import { Affix, ActionIcon } from "@mantine/core";
 import { IconPencil } from "@tabler/icons";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { EditEventDialog } from "../../components/event/EditEventDialog";
+import { EventDetails } from "../../components/event/EventDetails";
 import { QueryComponent } from "../../components/QueryComponent";
 import EventService from "../../services/EventService";
 
@@ -18,12 +19,7 @@ export default function MyEventDetailsPage() {
   return (
     <>
       <QueryComponent resourceName={"Event Details"} query={eventQuery}>
-        <Stack>
-          <Text weight="bold" size="xl">
-            {eventQuery.data?.name}
-          </Text>
-          <Text>{JSON.stringify(eventQuery.data)}</Text>
-        </Stack>
+        <EventDetails event={eventQuery.data} />
       </QueryComponent>
       <EditEventDialog
         open={openEdit}

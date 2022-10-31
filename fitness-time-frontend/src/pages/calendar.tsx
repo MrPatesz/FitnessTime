@@ -30,7 +30,8 @@ export default function CalendarPage() {
           businessEndsHour={17}
           startDate={startDate}
           events={eventsQuery.data?.map((event) => {
-            const offsetInHours = 2; // event.from.getTimezoneOffset() / 60;
+            const offsetInHours =
+              (new Date(event.from).getTimezoneOffset() / 60) * -1;
             const start = dayjs(event.from)
               .hour(dayjs(event.from).hour() + offsetInHours)
               .toDate();

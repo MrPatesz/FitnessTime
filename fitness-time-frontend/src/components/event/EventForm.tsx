@@ -1,13 +1,7 @@
-import {
-  Checkbox,
-  NumberInput,
-  Stack,
-  Textarea,
-  TextInput,
-} from "@mantine/core";
+import { NumberInput, Stack, Textarea, TextInput } from "@mantine/core";
 import React from "react";
 import EventDto from "../../models/eventDto";
-import { DateTimePicker } from "../DateTimePicker";
+import { IntervalPicker } from "../IntervalPicker";
 
 export const EventForm: React.FunctionComponent<{
   event: EventDto;
@@ -38,11 +32,12 @@ export const EventForm: React.FunctionComponent<{
           setEvent({ ...event, location: e.currentTarget.value })
         }
       />
-      <DateTimePicker
-        from={event.from}
-        to={event.to}
-        setFrom={(newValue) => setEvent({ ...event, from: newValue })}
-        setTo={(newValue) => setEvent({ ...event, to: newValue })}
+      <IntervalPicker
+        start={new Date(event.from)}
+        end={new Date(event.to)}
+        onChange={(newStart, newEnd) =>
+          setEvent({ ...event, from: newStart, to: newEnd })
+        }
       />
       <NumberInput
         label="Limit"
@@ -65,13 +60,13 @@ export const EventForm: React.FunctionComponent<{
           setEvent({ ...event, equipment: e.currentTarget.value })
         }
       />
-      <Checkbox
+      {/* <Checkbox
         label="Is it recurring every week?"
         checked={event.recurring}
         onChange={(e) =>
           setEvent({ ...event, recurring: e.currentTarget.checked })
         }
-      />
+      /> */}
       {submitButton}
     </Stack>
   );

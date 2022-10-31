@@ -1,7 +1,8 @@
-import { Text, Stack, Button } from "@mantine/core";
+import { Stack, Button } from "@mantine/core";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import React from "react";
+import { EventDetails } from "../../components/event/EventDetails";
 import { QueryComponent } from "../../components/QueryComponent";
 import EventService from "../../services/EventService";
 
@@ -17,10 +18,7 @@ export default function EventDetailsPage() {
   return (
     <QueryComponent resourceName={"Event Details"} query={eventQuery}>
       <Stack>
-        <Text weight="bold" size="xl">
-          {eventQuery.data?.name}
-        </Text>
-        <Text>{JSON.stringify(eventQuery.data)}</Text>
+        <EventDetails event={eventQuery.data} />
         {eventQuery.data?.participants.find(
           (p) => p.id === session?.user.userId
         ) ? (
