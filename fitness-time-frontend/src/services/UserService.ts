@@ -11,17 +11,13 @@ export default function UserService() {
 
   const crudService = CrudServiceBase<UserDto>(apiPostFix);
 
-  const config = {
-    headers: {
-      Authorization: `Bearer ${session?.user.jwt}`,
-    },
-  };
-
   const useGetProfile = () => {
     return useQuery<UserDto>(
-      ["profile" /*TODO [apiPostFix, session?.user.userId]*/],
+      [[apiPostFix, session?.user.userId]],
       () =>
-        axios.get<UserDto>(`${apiUrl}/profile`, config).then((res) => res.data),
+        axios
+          .get<UserDto>(`${apiUrl}/profile`, crudService.config)
+          .then((res) => res.data),
       {
         enabled: !!session,
       }
@@ -29,6 +25,7 @@ export default function UserService() {
   };
 
   return {
+    // not exposing: useCreate, config, invalidateQueries
     useGetAll: crudService.useGetAll,
     useGetSingle: crudService.useGetSingle,
     useUpdate: crudService.useUpdate,

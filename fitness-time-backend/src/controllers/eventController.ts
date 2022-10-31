@@ -18,6 +18,12 @@ const getAllOwned = async (req: Request, res: Response) => {
   return res.status(200).json(events);
 };
 
+const getFeed = async (req: Request, res: Response) => {
+  const callerId = getCallerId(req);
+  const events = await eventService.getFeed(callerId);
+  return res.status(200).json(events);
+};
+
 const getSingle = async (req: Request, res: Response) => {
   const id = getPathId(req);
 
@@ -96,4 +102,5 @@ export default {
   deleteSingle,
   getAllOwned,
   participate,
+  getFeed,
 };

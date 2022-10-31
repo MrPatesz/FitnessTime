@@ -33,7 +33,7 @@ export default function MyEventsPage() {
             {eventsQuery.data?.map((event) => (
               <tr key={event.id}>
                 <td>
-                  <Link href={"/events/[id]"} as={`/events/${event.id}`}>
+                  <Link href={"/my-events/[id]"} as={`/my-events/${event.id}`}>
                     <Text component="a" sx={{ cursor: "pointer" }}>
                       {event.name}
                     </Text>

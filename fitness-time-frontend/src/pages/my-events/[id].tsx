@@ -1,4 +1,4 @@
-import { Text, Affix, ActionIcon, Stack, Button } from "@mantine/core";
+import { Text, Affix, ActionIcon, Stack } from "@mantine/core";
 import { IconPencil } from "@tabler/icons";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
@@ -6,7 +6,7 @@ import { EditEventDialog } from "../../components/event/EditEventDialog";
 import { QueryComponent } from "../../components/QueryComponent";
 import EventService from "../../services/EventService";
 
-export default function EventDetailsPage() {
+export default function MyEventDetailsPage() {
   const [openEdit, setOpenEdit] = useState(false);
 
   const router = useRouter();
@@ -14,7 +14,6 @@ export default function EventDetailsPage() {
 
   const eventService = EventService();
   const eventQuery = eventService.useGetSingle(id?.toString());
-  const participate = eventService.useParticipate();
 
   return (
     <>
@@ -24,13 +23,6 @@ export default function EventDetailsPage() {
             {eventQuery.data?.name}
           </Text>
           <Text>{JSON.stringify(eventQuery.data)}</Text>
-          <Button
-            onClick={() =>
-              participate.mutate({ id: id?.toString(), status: true })
-            }
-          >
-            Participate
-          </Button>
         </Stack>
       </QueryComponent>
       <EditEventDialog

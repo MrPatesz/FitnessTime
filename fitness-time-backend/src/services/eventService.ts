@@ -1,6 +1,7 @@
 import { Event } from "../models/eventModel";
 import EventDto, { toEventDto } from "../dtos/eventDto";
 import { User } from "../models/userModel";
+import { Op } from "sequelize";
 
 const getAll = async (): Promise<EventDto[]> => {
   const entities = await Event.findAll({
@@ -13,6 +14,15 @@ const getAll = async (): Promise<EventDto[]> => {
 const getAllOwned = async (ownerId: number): Promise<EventDto[]> => {
   const entities = await Event.findAll({
     where: { ownerId },
+    include: [{ model: User, as: "owner" }],
+    order: [["name", "ASC"]],
+  });
+  return entities.map((e) => toEventDto(e));
+};
+
+const getFeed = async (callerId: number): Promise<EventDto[]> => {
+  const entities = await Event.findAll({
+    where: { ownerId: { [Op.ne]: callerId } },
     include: [{ model: User, as: "owner" }],
     order: [["name", "ASC"]],
   });
@@ -102,4 +112,5 @@ export default {
   getAllOwned,
   participate,
   removeParticipation,
+  getFeed,
 };

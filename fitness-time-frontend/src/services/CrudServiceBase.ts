@@ -78,5 +78,7 @@ export default function CrudServiceBase<R extends DtoBase>(apiPostFix: string) {
     useCreate,
     useUpdate,
     useDelete,
+    config,
+    invalidateQueries,
   };
 }

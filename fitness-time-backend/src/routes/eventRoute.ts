@@ -5,6 +5,8 @@ const router = express.Router();
 
 router.get("/owned", controller.getAllOwned);
 
+router.get("/feed", controller.getFeed);
+
 router.get("/", controller.getAll);
 
 router.get("/:id", controller.getSingle);
