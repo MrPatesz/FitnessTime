@@ -33,7 +33,7 @@ export const ApplicationShell: React.FunctionComponent<{
           {[
             { label: "Calendar", route: "/calendar", icon: IconCalendarEvent },
             { label: "Feed", route: "/feed", icon: IconNews },
-            { label: "My Events", route: "/events", icon: IconAdjustments },
+            { label: "My Events", route: "/my-events", icon: IconAdjustments },
             { label: "Users", route: "/users", icon: IconUsers },
           ].map((link) => (
             <Link href={link.route} passHref key={link.label}>

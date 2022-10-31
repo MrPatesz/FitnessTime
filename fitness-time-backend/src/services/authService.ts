@@ -4,6 +4,7 @@ import { User } from "../models/userModel";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { AuthToken } from "../dtos/authToken";
+import { AuthDto } from "../dtos/authDto";
 
 const register = async (user: LoginDto): Promise<UserDto | null> => {
   const saltRounds = 10;
@@ -21,7 +22,7 @@ const register = async (user: LoginDto): Promise<UserDto | null> => {
   }
 };
 
-const login = async (user: LoginDto): Promise<string | null> => {
+const login = async (user: LoginDto): Promise<AuthDto | null> => {
   const entity = await User.findOne({ where: { username: user.username } });
   if (!entity) return null;
 
@@ -34,9 +35,11 @@ const login = async (user: LoginDto): Promise<string | null> => {
   const jwtSecret = process.env.JWT_SECRET;
   if (!jwtSecret) return null;
 
-  const authToken: AuthToken = { userId: (entity as any).id };
+  const userId = (entity as any).id;
+  const authToken: AuthToken = { userId };
   const jsonWebToken = jwt.sign(authToken, jwtSecret, { expiresIn: "12h" });
-  return jsonWebToken;
+
+  return { userId, jwt: jsonWebToken, username: user.username };
 };
 
 export default { register, login };

@@ -26,8 +26,8 @@ export const authOptions: NextAuthOptions = {
           password: string;
         };
         try {
-          const jwt = await authService.login({ username, password });
-          return { jwt, username };
+          const authDto = await authService.login({ username, password });
+          return authDto;
         } catch (error: any) {
           console.log(error.message);
           return null;
@@ -40,12 +40,14 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         token.username = user.username;
         token.jwt = user.jwt;
+        token.userId = user.userId;
       }
       return token;
     },
     session: async ({ session, token }) => {
       session.user.jwt = token.jwt;
       session.user.username = token.username;
+      session.user.userId = token.userId;
       return session;
     },
   },

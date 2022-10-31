@@ -3,6 +3,7 @@ import NextAuth, { DefaultSession } from "next-auth";
 interface UserBase {
   username: string;
   jwt: string;
+  userId: number;
 }
 
 declare module "next-auth" {
