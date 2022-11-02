@@ -6,15 +6,18 @@ const getCallerId = (req: Request): number => (req.user as UserDto).id;
 const getPathId = (req: Request): number => parseInt(req.params.id ?? "");
 const getUserDto = (req: Request): UserDto => req.body;
 
-const getAll = async (_req: Request, res: Response) => {
-  const users = await service.getAll();
+const getAll = async (req: Request, res: Response) => {
+  const callerId = getCallerId(req);
+
+  const users = await service.getAll(callerId);
   return res.status(200).json(users);
 };
 
 const getSingle = async (req: Request, res: Response) => {
+  const callerId = getCallerId(req);
   const id = getPathId(req);
 
-  const user = await service.getSingle(id);
+  const user = await service.getSingle(id, callerId);
 
   if (user) {
     return res.status(200).json(user);
@@ -26,7 +29,7 @@ const getSingle = async (req: Request, res: Response) => {
 const getProfile = async (req: Request, res: Response) => {
   const callerId = getCallerId(req);
 
-  const user = await service.getSingle(callerId);
+  const user = await service.getSingle(callerId, callerId);
 
   if (user) {
     return res.status(200).json(user);

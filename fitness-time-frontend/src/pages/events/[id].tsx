@@ -9,13 +9,14 @@ import {
 } from "@mantine/core";
 import { IconPencil } from "@tabler/icons";
 import { useSession } from "next-auth/react";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { EditEventDialog } from "../../components/event/EditEventDialog";
 import { QueryComponent } from "../../components/QueryComponent";
 import EventService from "../../services/EventService";
 
-export default function MyEventDetailsPage() {
+export default function EventDetailsPage() {
   const [openEdit, setOpenEdit] = useState(false);
 
   const { data: session } = useSession();
@@ -35,13 +36,19 @@ export default function MyEventDetailsPage() {
               <Text weight="bold" size="xl">
                 {eventQuery.data?.name}
               </Text>
-              <Text>{eventQuery.data?.owner?.username}</Text>
+              <Link
+                href={"/users/[id]"}
+                as={`/users/${eventQuery.data?.owner?.id}`}
+                passHref
+              >
+                <Text size="xl" component="a" sx={{ cursor: "pointer" }}>
+                  {eventQuery.data?.owner?.username}
+                </Text>
+              </Link>
             </Group>
-            <Text>{eventQuery.data?.description}</Text>
-            <Text>{eventQuery.data?.location}</Text>
-            <Text>{eventQuery.data?.equipment}</Text>
-            <Text>{eventQuery.data?.price}</Text>
-            <Text>{eventQuery.data?.limit}</Text>
+            {eventQuery.data?.description && (
+              <Text>{eventQuery.data?.description}</Text>
+            )}
             {eventQuery.data && (
               <Text>
                 {new Date(eventQuery.data.from).toLocaleDateString()}{" "}
@@ -49,12 +56,33 @@ export default function MyEventDetailsPage() {
                 {new Date(eventQuery.data.to).toLocaleTimeString()}
               </Text>
             )}
+            {eventQuery.data?.location && (
+              <Text>Location: {eventQuery.data?.location}</Text>
+            )}
+            {eventQuery.data?.equipment && (
+              <Text>Equipment: {eventQuery.data?.equipment}</Text>
+            )}
+            {eventQuery.data?.price && (
+              <Text>Price: {eventQuery.data?.price}</Text>
+            )}
+            {eventQuery.data?.limit && (
+              <Text>Limit: {eventQuery.data?.limit}</Text>
+            )}
 
             <Card shadow="md" radius="md" p="lg">
               <Text weight="bold">Participants</Text>
               <Stack spacing="xs">
                 {eventQuery.data?.participants.map((p) => (
-                  <Text key={p.id}>{p.username}</Text>
+                  <Link
+                    key={p.id}
+                    href={"/users/[id]"}
+                    as={`/users/${p.id}`}
+                    passHref
+                  >
+                    <Text component="a" sx={{ cursor: "pointer" }}>
+                      {p.username}
+                    </Text>
+                  </Link>
                 ))}
               </Stack>
             </Card>

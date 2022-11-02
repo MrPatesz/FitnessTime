@@ -32,10 +32,9 @@ export const toEventDto = (event: Event, callerId: number): EventDto => {
     limit: event.limit,
     price: event.price,
     equipment: event.equipment,
-    owner: event.owner ? toUserDto(event.owner) : undefined,
-    participants: event.participants
-      ? event.participants.map((p: User) => toUserDto(p))
-      : [],
+    owner: event.owner ? toUserDto(event.owner, callerId) : undefined,
+    participants:
+      event.participants?.map((p: User) => toUserDto(p, callerId)) ?? [],
     ownedByCaller: callerId === event.ownerId,
   };
 };

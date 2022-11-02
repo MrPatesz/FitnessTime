@@ -1,13 +1,15 @@
-import { Affix, ActionIcon, Table, Text } from "@mantine/core";
-import Link from "next/link";
+import { Affix, ActionIcon, Table } from "@mantine/core";
 import React, { useState } from "react";
 import { QueryComponent } from "../components/QueryComponent";
 import EventService from "../services/EventService";
 import { IconPlus, IconTrash } from "@tabler/icons";
 import { CreateEventDialog } from "../components/event/CreateEventDialog";
+import { useRouter } from "next/router";
 
 export default function MyEventsPage() {
   const [openCreate, setOpenCreate] = useState(false);
+
+  const router = useRouter();
 
   const eventService = EventService();
   const eventsQuery = eventService.useGetAllOwned();
@@ -21,36 +23,41 @@ export default function MyEventsPage() {
             <tr>
               <th>Name</th>
               <th>Location</th>
-              <th>From</th>
-              <th>To</th>
+              <th>Date</th>
+              <th>Interval</th>
               <th>Limit</th>
               <th>Price</th>
               <th>Equipment</th>
-              <th>Recurring</th>
+              <th></th>
+              {/* <th>Recurring</th> */}
             </tr>
           </thead>
           <tbody>
             {eventsQuery.data?.map((event) => (
-              <tr key={event.id}>
-                <td>
-                  <Link href={"/events/[id]"} as={`/events/${event.id}`}>
-                    <Text component="a" sx={{ cursor: "pointer" }}>
-                      {event.name}
-                    </Text>
-                  </Link>
-                </td>
+              <tr
+                key={event.id}
+                onClick={() => router.replace(`events/${event.id}`)}
+                style={{ cursor: "pointer" }}
+              >
+                <td>{event.name}</td>
                 <td>{event.location}</td>
-                <td>{event.from.toString()}</td>
-                <td>{event.to.toString()}</td>
+                <td>{new Date(event.from).toLocaleDateString()}</td>
+                <td>
+                  {new Date(event.from).toLocaleTimeString()} -{" "}
+                  {new Date(event.to).toLocaleTimeString()}
+                </td>
                 <td>{event.limit}</td>
                 <td>{event.price}</td>
                 <td>{event.equipment}</td>
-                <td>{event.recurring.toString()}</td>
+                {/* <td>{event.recurring.toString()}</td> */}
                 <td>
                   <ActionIcon
                     variant="filled"
                     size="md"
-                    onClick={() => deleteEvent.mutate(event.id)}
+                    onClick={(e: any) => {
+                      e.stopPropagation();
+                      deleteEvent.mutate(event.id);
+                    }}
                   >
                     <IconTrash />
                   </ActionIcon>

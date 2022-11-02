@@ -1,11 +1,13 @@
 import { DataTypes, Sequelize } from "sequelize";
 import { Model } from "sequelize";
+import { Event } from "./eventModel";
 
 export class User extends Model {
   declare id: number;
   username: string;
   passwordHash: string;
   introduction: string | null;
+  ownedEvents?: Event[];
 }
 
 export const initUser = (sequelize: Sequelize) => {

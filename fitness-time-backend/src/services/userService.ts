@@ -1,17 +1,22 @@
 import UserDto, { toUserDto } from "../dtos/userDto";
+import { Event } from "../models/eventModel";
 import { User } from "../models/userModel";
 
-const getAll = async (): Promise<UserDto[]> => {
+const getAll = async (callerId: number): Promise<UserDto[]> => {
   const entities = await User.findAll({
     order: [["username", "ASC"]],
   });
-  return entities.map((e) => toUserDto(e));
+  return entities.map((e) => toUserDto(e, callerId));
 };
 
-const getSingle = async (id: number): Promise<UserDto | null> => {
-  const entity = await User.findByPk(id);
-  if (!entity) return null;
-  else return toUserDto(entity);
+const getSingle = async (
+  id: number,
+  callerId: number
+): Promise<UserDto | null> => {
+  const entity = await User.findByPk(id, {
+    include: [{ model: Event, as: "ownedEvents" }],
+  });
+  return entity ? toUserDto(entity, callerId) : null;
 };
 
 const update = async (
@@ -25,7 +30,7 @@ const update = async (
 
   try {
     entity.update({ ...userDto });
-    return toUserDto(entity);
+    return toUserDto(entity, callerId);
   } catch (error) {
     return null;
   }

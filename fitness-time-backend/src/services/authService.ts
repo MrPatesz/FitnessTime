@@ -15,8 +15,7 @@ const register = async (user: LoginDto): Promise<UserDto | null> => {
       username: user.username,
       passwordHash,
     });
-    if (!entity) return null;
-    else return toUserDto(entity);
+    return entity ? toUserDto(entity, -1) : null;
   } catch (error) {
     return null;
   }

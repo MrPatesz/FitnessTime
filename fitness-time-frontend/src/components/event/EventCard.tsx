@@ -26,11 +26,11 @@ export const EventCard: React.FunctionComponent<{
               Limited
             </Badge>
           )}
-          {event.recurring && (
+          {/* {event.recurring && (
             <Badge color="violet" variant="light">
               Recurring
             </Badge>
-          )}
+          )} */}
         </Group>
         <Text>{event.description}</Text>
         <Link href={"/events/[id]"} as={`/events/${event.id}`} passHref>
