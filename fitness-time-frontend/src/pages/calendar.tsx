@@ -7,6 +7,7 @@ import {
 import { useState } from "react";
 import { useMantineTheme } from "@mantine/core";
 import dayjs from "dayjs";
+import { useRouter } from "next/router";
 
 export default function CalendarPage() {
   const [startDate, setStartDate] = useState(new Date());
@@ -14,6 +15,7 @@ export default function CalendarPage() {
   const eventService = EventService();
   const eventsQuery = eventService.useGetAll(); // TODO getCalendarEvents
   const theme = useMantineTheme();
+  const router = useRouter();
 
   return (
     <>
@@ -29,6 +31,7 @@ export default function CalendarPage() {
           businessBeginsHour={8}
           businessEndsHour={17}
           startDate={startDate}
+          onEventClick={(e: any) => router.replace(`events/${e.e.data.id}`)}
           events={eventsQuery.data?.map((event) => {
             const offsetInHours =
               (new Date(event.from).getTimezoneOffset() / 60) * -1;
@@ -43,7 +46,9 @@ export default function CalendarPage() {
               text: event.name,
               start,
               end,
-              backColor: theme.colors.violet[8],
+              backColor: event.ownedByCaller
+                ? theme.colors.violet[8]
+                : theme.colors.blue[8],
               fontColor: "white",
             };
           })}

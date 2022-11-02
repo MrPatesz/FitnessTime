@@ -3,21 +3,24 @@ import EventDto, { toEventDto } from "../dtos/eventDto";
 import { User } from "../models/userModel";
 import { Op } from "sequelize";
 
-const getAll = async (): Promise<EventDto[]> => {
+const getAll = async (callerId: number): Promise<EventDto[]> => {
   const entities = await Event.findAll({
     include: [{ model: User, as: "owner" }],
     order: [["name", "ASC"]],
   });
-  return entities.map((e) => toEventDto(e));
+  return entities.map((e) => toEventDto(e, callerId));
 };
 
-const getAllOwned = async (ownerId: number): Promise<EventDto[]> => {
+const getAllOwned = async (
+  ownerId: number,
+  callerId: number
+): Promise<EventDto[]> => {
   const entities = await Event.findAll({
     where: { ownerId },
     include: [{ model: User, as: "owner" }],
     order: [["name", "ASC"]],
   });
-  return entities.map((e) => toEventDto(e));
+  return entities.map((e) => toEventDto(e, callerId));
 };
 
 const getFeed = async (callerId: number): Promise<EventDto[]> => {
@@ -26,10 +29,13 @@ const getFeed = async (callerId: number): Promise<EventDto[]> => {
     include: [{ model: User, as: "owner" }],
     order: [["name", "ASC"]],
   });
-  return entities.map((e) => toEventDto(e));
+  return entities.map((e) => toEventDto(e, callerId));
 };
 
-const getSingle = async (id: number): Promise<EventDto | null> => {
+const getSingle = async (
+  id: number,
+  callerId: number
+): Promise<EventDto | null> => {
   const entity = await Event.findByPk(id, {
     include: [
       { model: User, as: "owner" },
@@ -37,7 +43,7 @@ const getSingle = async (id: number): Promise<EventDto | null> => {
     ],
   });
   if (!entity) return null;
-  else return toEventDto(entity);
+  else return toEventDto(entity, callerId);
 };
 
 const create = async (
@@ -52,7 +58,7 @@ const create = async (
       ownerId: callerId,
       id: undefined,
     });
-    return toEventDto(event);
+    return toEventDto(event, callerId);
   } catch (error) {
     return null;
   }
@@ -69,7 +75,7 @@ const update = async (
   if (!entity) return null;
 
   entity.update({ ...eventDto });
-  return toEventDto(entity);
+  return toEventDto(entity, callerId);
 };
 
 const deleteSingle = async (id: number, callerId: number): Promise<boolean> => {

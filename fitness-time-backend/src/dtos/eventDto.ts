@@ -16,9 +16,10 @@ export default interface EventDto extends DtoBase {
   price: number | null;
   equipment: string | null;
   participants: UserDto[];
+  ownedByCaller: boolean;
 }
 
-export const toEventDto = (event: Event): EventDto => {
+export const toEventDto = (event: Event, callerId: number): EventDto => {
   return {
     id: event.id,
     ownerId: event.ownerId,
@@ -35,5 +36,6 @@ export const toEventDto = (event: Event): EventDto => {
     participants: event.participants
       ? event.participants.map((p: User) => toUserDto(p))
       : [],
+    ownedByCaller: callerId === event.ownerId,
   };
 };

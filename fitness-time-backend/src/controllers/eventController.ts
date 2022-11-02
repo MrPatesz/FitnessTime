@@ -7,14 +7,15 @@ const getCallerId = (req: Request): number => (req.user as UserDto).id;
 const getPathId = (req: Request): number => parseInt(req.params.id ?? "");
 const getEventDto = (req: Request): EventDto => req.body;
 
-const getAll = async (_req: Request, res: Response) => {
-  const events = await eventService.getAll();
+const getAll = async (req: Request, res: Response) => {
+  const callerId = getCallerId(req);
+  const events = await eventService.getAll(callerId);
   return res.status(200).json(events);
 };
 
 const getAllOwned = async (req: Request, res: Response) => {
   const callerId = getCallerId(req);
-  const events = await eventService.getAllOwned(callerId);
+  const events = await eventService.getAllOwned(callerId, callerId);
   return res.status(200).json(events);
 };
 
@@ -25,9 +26,10 @@ const getFeed = async (req: Request, res: Response) => {
 };
 
 const getSingle = async (req: Request, res: Response) => {
+  const callerId = getCallerId(req);
   const id = getPathId(req);
 
-  const event = await eventService.getSingle(id);
+  const event = await eventService.getSingle(id, callerId);
 
   if (event) {
     return res.status(200).json(event);

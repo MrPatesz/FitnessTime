@@ -14,6 +14,7 @@ export default interface EventDto extends DtoBase {
   price: number | null;
   equipment: string | null;
   participants: UserDto[];
+  ownedByCaller: boolean;
 }
 
 export const defaultEventDto: EventDto = {
@@ -30,4 +31,5 @@ export const defaultEventDto: EventDto = {
   price: null,
   equipment: null,
   participants: [],
+  ownedByCaller: true,
 };

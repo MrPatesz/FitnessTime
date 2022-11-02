@@ -1,10 +1,10 @@
 import { Affix, ActionIcon, Table, Text } from "@mantine/core";
 import Link from "next/link";
 import React, { useState } from "react";
-import { QueryComponent } from "../../components/QueryComponent";
-import EventService from "../../services/EventService";
+import { QueryComponent } from "../components/QueryComponent";
+import EventService from "../services/EventService";
 import { IconPlus, IconTrash } from "@tabler/icons";
-import { CreateEventDialog } from "../../components/event/CreateEventDialog";
+import { CreateEventDialog } from "../components/event/CreateEventDialog";
 
 export default function MyEventsPage() {
   const [openCreate, setOpenCreate] = useState(false);
@@ -15,7 +15,7 @@ export default function MyEventsPage() {
 
   return (
     <>
-      <QueryComponent resourceName={"Events"} query={eventsQuery}>
+      <QueryComponent resourceName={"My Events"} query={eventsQuery}>
         <Table highlightOnHover>
           <thead>
             <tr>
@@ -33,7 +33,7 @@ export default function MyEventsPage() {
             {eventsQuery.data?.map((event) => (
               <tr key={event.id}>
                 <td>
-                  <Link href={"/my-events/[id]"} as={`/my-events/${event.id}`}>
+                  <Link href={"/events/[id]"} as={`/events/${event.id}`}>
                     <Text component="a" sx={{ cursor: "pointer" }}>
                       {event.name}
                     </Text>

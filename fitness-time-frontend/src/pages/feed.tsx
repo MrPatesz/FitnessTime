@@ -1,8 +1,8 @@
 import { SimpleGrid } from "@mantine/core";
 import React from "react";
-import { EventCard } from "../../components/event/EventCard";
-import { QueryComponent } from "../../components/QueryComponent";
-import EventService from "../../services/EventService";
+import { EventCard } from "../components/event/EventCard";
+import { QueryComponent } from "../components/QueryComponent";
+import EventService from "../services/EventService";
 
 export default function FeedPage() {
   const eventService = EventService();
