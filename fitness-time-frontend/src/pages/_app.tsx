@@ -8,6 +8,7 @@ import { useState } from "react";
 import { MantineProvider, MantineThemeOverride } from "@mantine/core";
 import { useColorScheme } from "@mantine/hooks";
 import { ApplicationShell } from "../components/ApplicationShell";
+import { NotificationsProvider } from "@mantine/notifications";
 
 export default function App({
   Component,
@@ -40,13 +41,15 @@ export default function App({
         <title>Fitness Time</title>
       </Head>
       <MantineProvider withGlobalStyles withNormalizeCSS theme={myTheme}>
-        <SessionProvider session={pageProps.session}>
-          <QueryClientProvider client={queryClient}>
-            <ApplicationShell>
-              <Component {...pageProps} />
-            </ApplicationShell>
-          </QueryClientProvider>
-        </SessionProvider>
+        <NotificationsProvider>
+          <SessionProvider session={pageProps.session}>
+            <QueryClientProvider client={queryClient}>
+              <ApplicationShell>
+                <Component {...pageProps} />
+              </ApplicationShell>
+            </QueryClientProvider>
+          </SessionProvider>
+        </NotificationsProvider>
       </MantineProvider>
     </>
   );

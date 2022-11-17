@@ -12,6 +12,7 @@ import {
   Stack,
 } from "@mantine/core";
 import { IconKey, IconUser } from "@tabler/icons";
+import { showNotification } from "@mantine/notifications";
 
 export default function WelcomePage() {
   const [openCreate, setOpenCreate] = useState(false);
@@ -22,6 +23,8 @@ export default function WelcomePage() {
   const router = useRouter();
   const { data: session } = useSession();
 
+  const goToLoginPage = () => signIn(undefined, { callbackUrl: "/" });
+
   if (session) {
     router.replace("/");
   }
@@ -31,9 +34,7 @@ export default function WelcomePage() {
       <h1>Welcome to Fitness Time!</h1>
       <Group>
         <Button onClick={() => setOpenCreate(true)}>Register</Button>
-        <Button onClick={() => signIn(undefined, { callbackUrl: "/" })}>
-          Login
-        </Button>
+        <Button onClick={goToLoginPage}>Login</Button>
       </Group>
       <Modal
         opened={openCreate}
@@ -59,7 +60,20 @@ export default function WelcomePage() {
             withAsterisk
             icon={<IconKey />}
           />
-          <Button onClick={() => authService.register({ username, password })}>
+          <Button
+            onClick={() =>
+              authService
+                .register({ username, password })
+                .then(goToLoginPage)
+                .catch(() =>
+                  showNotification({
+                    color: "red",
+                    title: "Username taken",
+                    message: "This username is already in use!",
+                  })
+                )
+            }
+          >
             Register
           </Button>
         </Stack>
