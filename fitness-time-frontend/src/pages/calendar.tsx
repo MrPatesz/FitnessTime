@@ -5,15 +5,20 @@ import {
   DayPilotNavigator,
 } from "@daypilot/daypilot-lite-react";
 import { useState } from "react";
-import { useMantineTheme } from "@mantine/core";
+import { Box, useMantineTheme } from "@mantine/core";
 import dayjs from "dayjs";
 import { useRouter } from "next/router";
+import { CreateEventDialog } from "../components/event/CreateEventDialog";
 
 export default function CalendarPage() {
   const [startDate, setStartDate] = useState(new Date());
+  const [openCreate, setOpenCreate] = useState(false);
+  const [defaultStart, setDefaultStart] = useState(new Date());
+  const [defaultEnd, setDefaultEnd] = useState(new Date());
 
   const eventService = EventService();
   const eventsQuery = eventService.useGetAll(); // TODO getCalendarEvents
+  const updateEvent = eventService.useUpdate();
   const theme = useMantineTheme();
   const router = useRouter();
 
@@ -21,12 +26,44 @@ export default function CalendarPage() {
     <>
       <QueryComponent resourceName="Calendar" query={eventsQuery}>
         <DayPilotCalendar
+          theme={theme.colorScheme === "dark" ? "dark" : undefined}
           viewType="Week"
           timeFormat="Clock24Hours"
           headerDateFormat="MMMM d"
-          eventMoveHandling="Disabled"
-          eventResizeHandling="Disabled"
-          timeRangeSelectedHandling="Disabled"
+          onTimeRangeSelected={(event: {
+            start: { value: string };
+            end: { value: string };
+          }) => {
+            setDefaultStart(new Date(event.start.value));
+            setDefaultEnd(new Date(event.end.value));
+            setOpenCreate(true);
+          }}
+          onEventResize={(event: {
+            e: any;
+            newStart: { value: string };
+            newEnd: { value: string };
+          }) => {
+            updateEvent.mutate({
+              ...event.e.data.resource,
+              from: new Date(event.newStart.value),
+              to: new Date(event.newEnd.value),
+            });
+          }}
+          onEventMove={(event: {
+            e: any;
+            newStart: { value: string };
+            newEnd: { value: string };
+            newResource: any;
+            external: boolean;
+            ctrl: boolean;
+            shift: boolean;
+          }) => {
+            updateEvent.mutate({
+              ...event.e.data.resource,
+              from: new Date(event.newStart.value),
+              to: new Date(event.newEnd.value),
+            });
+          }}
           durationBarVisible={false}
           businessBeginsHour={8}
           businessEndsHour={17}
@@ -50,13 +87,23 @@ export default function CalendarPage() {
                 ? theme.colors.violet[8]
                 : theme.colors.blue[8],
               fontColor: "white",
+              resource: event,
             };
           })}
         />
       </QueryComponent>
-      <DayPilotNavigator
-        selectMode="week"
-        onTimeRangeSelected={(args: { day: Date }) => setStartDate(args.day)}
+      <Box sx={{ position: "absolute", left: -1, bottom: 0, zIndex: 999 }}>
+        <DayPilotNavigator
+          theme={theme.colorScheme === "dark" ? "dark_navigator" : undefined}
+          selectMode="week"
+          onTimeRangeSelected={(args: { day: Date }) => setStartDate(args.day)}
+        />
+      </Box>
+      <CreateEventDialog
+        open={openCreate}
+        onClose={() => setOpenCreate(false)}
+        defaultStart={defaultStart}
+        defaultEnd={defaultEnd}
       />
     </>
   );

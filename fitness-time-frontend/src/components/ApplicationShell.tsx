@@ -29,7 +29,7 @@ export const ApplicationShell: React.FunctionComponent<{
     <AppShell
       hidden={!session}
       navbar={
-        <Navbar width={{ base: 200 }} p="xs">
+        <Navbar width={{ base: 211 }} p="xs">
           {[
             { label: "Calendar", route: "/calendar", icon: IconCalendarEvent },
             { label: "Feed", route: "/feed", icon: IconNews },
