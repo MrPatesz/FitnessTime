@@ -1,11 +1,12 @@
 import DtoBase from "./dtoBase";
+import { LocationDto } from "./locationDto";
 import UserDto from "./userDto";
 
 export default interface EventDto extends DtoBase {
   ownerId: number;
   owner?: UserDto;
   name: string;
-  location: string;
+  location: LocationDto;
   from: Date;
   to: Date;
   recurring: boolean;
@@ -22,7 +23,11 @@ export const defaultEventDto: EventDto = {
   ownerId: 0,
   owner: undefined,
   name: "",
-  location: "",
+  location: {
+    longitude: 0,
+    latitude: 0,
+    address: "",
+  },
   from: new Date(),
   to: new Date(),
   recurring: false,

@@ -49,7 +49,9 @@ export const initDatabase = () => {
       return Event.create({
         ownerId: user.id,
         name: "Full body workout",
-        location: "4%",
+        longitude: 19.0633245,
+        latitude: 47.4873813,
+        address: "4% Fitness GYM",
         from: new Date(),
         to: new Date(),
         recurring: true,

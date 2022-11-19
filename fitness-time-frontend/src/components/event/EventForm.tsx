@@ -2,6 +2,7 @@ import { NumberInput, Stack, Textarea, TextInput } from "@mantine/core";
 import React from "react";
 import EventDto from "../../models/eventDto";
 import { IntervalPicker } from "../IntervalPicker";
+import { LocationPicker } from "../LocationPicker";
 
 export const EventForm: React.FunctionComponent<{
   event: EventDto;
@@ -12,7 +13,9 @@ export const EventForm: React.FunctionComponent<{
   return (
     <Stack>
       <TextInput
+        withAsterisk
         label="Name"
+        placeholder="What is the event called?"
         value={event.name}
         onChange={(e) => setEvent({ ...event, name: e.currentTarget.value })}
       />
@@ -24,12 +27,13 @@ export const EventForm: React.FunctionComponent<{
           setEvent({ ...event, description: e.currentTarget.value })
         }
       />
-      <TextInput
-        label="Location"
-        placeholder="Where will it take place?"
-        value={event.location}
-        onChange={(e) =>
-          setEvent({ ...event, location: e.currentTarget.value })
+      <LocationPicker
+        defaultLocation={event.location.address}
+        setLocation={(newLocation) =>
+          setEvent({
+            ...event,
+            location: newLocation,
+          })
         }
       />
       <IntervalPicker
@@ -44,12 +48,14 @@ export const EventForm: React.FunctionComponent<{
         placeholder="Is there a maximum number of participants?"
         value={event.limit ?? undefined}
         onChange={(newValue) => setEvent({ ...event, limit: newValue ?? null })}
+        min={1}
       />
       <NumberInput
         label="Price"
         placeholder="Do participants need to pay for it?"
         value={event.price ?? undefined}
         onChange={(newValue) => setEvent({ ...event, price: newValue ?? null })}
+        min={1}
         // TODO formatter
       />
       <TextInput

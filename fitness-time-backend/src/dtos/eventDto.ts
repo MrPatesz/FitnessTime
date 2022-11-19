@@ -1,13 +1,14 @@
 import { Event } from "../models/eventModel";
 import { User } from "../models/userModel";
 import DtoBase from "./dtoBase";
+import { LocationDto } from "./locationDto";
 import UserDto, { toUserDto } from "./userDto";
 
 export default interface EventDto extends DtoBase {
   ownerId: number;
   owner?: UserDto;
   name: string;
-  location: string;
+  location: LocationDto;
   from: Date;
   to: Date;
   recurring: boolean;
@@ -24,7 +25,11 @@ export const toEventDto = (event: Event, callerId: number): EventDto => {
     id: event.id,
     ownerId: event.ownerId,
     name: event.name,
-    location: event.location,
+    location: {
+      longitude: event.longitude,
+      latitude: event.latitude,
+      address: event.address,
+    },
     from: event.from,
     to: event.to,
     recurring: event.recurring,

@@ -55,8 +55,12 @@ const create = async (
   try {
     const event = await Event.create({
       ...eventDto,
+      latitude: eventDto.location.latitude,
+      longitude: eventDto.location.longitude,
+      address: eventDto.location.address,
       ownerId: callerId,
       id: undefined,
+      location: undefined,
     });
     return toEventDto(event, callerId);
   } catch (error) {
@@ -74,7 +78,13 @@ const update = async (
   const entity = await Event.findByPk(eventDto.id);
   if (!entity) return null;
 
-  entity.update({ ...eventDto });
+  entity.update({
+    ...eventDto,
+    latitude: eventDto.location.latitude,
+    longitude: eventDto.location.longitude,
+    address: eventDto.location.address,
+    location: undefined,
+  });
   return toEventDto(entity, callerId);
 };
 

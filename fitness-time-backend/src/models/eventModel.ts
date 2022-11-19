@@ -7,7 +7,9 @@ export class Event extends Model {
   ownerId: number;
   owner?: User;
   name: string;
-  location: string;
+  latitude: number;
+  longitude: number;
+  address: string;
   from: Date;
   to: Date;
   recurring: boolean;
@@ -35,7 +37,15 @@ export const initEvent = (sequelize: Sequelize) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      location: {
+      latitude: {
+        type: DataTypes.FLOAT,
+        allowNull: false,
+      },
+      longitude: {
+        type: DataTypes.FLOAT,
+        allowNull: false,
+      },
+      address: {
         type: DataTypes.STRING,
         allowNull: false,
       },
