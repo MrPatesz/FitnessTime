@@ -19,12 +19,11 @@ export const EventForm: React.FunctionComponent<{
         value={event.name}
         onChange={(e) => setEvent({ ...event, name: e.currentTarget.value })}
       />
-      <Textarea
-        label="Description"
-        placeholder="What are the plans?"
-        value={event.description ?? "" /*TODO not nullable?*/}
-        onChange={(e) =>
-          setEvent({ ...event, description: e.currentTarget.value })
+      <IntervalPicker
+        start={new Date(event.from)}
+        end={new Date(event.to)}
+        onChange={(newStart, newEnd) =>
+          setEvent({ ...event, from: newStart, to: newEnd })
         }
       />
       <LocationPicker
@@ -36,27 +35,13 @@ export const EventForm: React.FunctionComponent<{
           })
         }
       />
-      <IntervalPicker
-        start={new Date(event.from)}
-        end={new Date(event.to)}
-        onChange={(newStart, newEnd) =>
-          setEvent({ ...event, from: newStart, to: newEnd })
+      <Textarea
+        label="Description"
+        placeholder="What are the plans?"
+        value={event.description ?? "" /*TODO not nullable?*/}
+        onChange={(e) =>
+          setEvent({ ...event, description: e.currentTarget.value })
         }
-      />
-      <NumberInput
-        label="Limit"
-        placeholder="Is there a maximum number of participants?"
-        value={event.limit ?? undefined}
-        onChange={(newValue) => setEvent({ ...event, limit: newValue ?? null })}
-        min={1}
-      />
-      <NumberInput
-        label="Price"
-        placeholder="Do participants need to pay for it?"
-        value={event.price ?? undefined}
-        onChange={(newValue) => setEvent({ ...event, price: newValue ?? null })}
-        min={1}
-        // TODO formatter
       />
       <TextInput
         label="Equipment"
@@ -65,6 +50,28 @@ export const EventForm: React.FunctionComponent<{
         onChange={(e) =>
           setEvent({ ...event, equipment: e.currentTarget.value })
         }
+      />
+      <NumberInput
+        label="Price"
+        placeholder="Do participants need to pay for it?"
+        value={event.price ?? undefined}
+        onChange={(newValue) => setEvent({ ...event, price: newValue ?? null })}
+        min={1}
+        parser={(value: string | undefined) =>
+          value?.replace(/\$\s?|(,*)/g, "")
+        }
+        formatter={(value: string | undefined) =>
+          !Number.isNaN(parseFloat(`${value}`))
+            ? `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            : "$ "
+        }
+      />
+      <NumberInput
+        label="Limit"
+        placeholder="Is there a maximum number of participants?"
+        value={event.limit ?? undefined}
+        onChange={(newValue) => setEvent({ ...event, limit: newValue ?? null })}
+        min={1}
       />
       {/* <Checkbox
         label="Is it recurring every week?"

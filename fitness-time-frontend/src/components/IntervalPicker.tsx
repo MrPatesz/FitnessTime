@@ -42,6 +42,7 @@ export const IntervalPicker: React.FunctionComponent<{
         }}
         clearable={false}
         minDate={new Date()}
+        firstDayOfWeek="sunday"
       />
       <TimeInput
         withAsterisk

@@ -24,12 +24,12 @@ export default function MyEventsPage() {
           <thead>
             <tr>
               <th>Name</th>
-              <th>Location</th>
               <th>Date</th>
               <th>Interval</th>
-              <th>Limit</th>
-              <th>Price</th>
+              <th>Location</th>
               <th>Equipment</th>
+              <th>Price</th>
+              <th>Limit</th>
               <th></th>
               {/* <th>Recurring</th> */}
             </tr>
@@ -42,7 +42,6 @@ export default function MyEventsPage() {
                 style={{ cursor: "pointer" }}
               >
                 <td>{event.name}</td>
-                <td>{event.location.address}</td>
                 <td>{new Date(event.from).toLocaleDateString()}</td>
                 <td>
                   <Group spacing="xs">
@@ -51,9 +50,10 @@ export default function MyEventsPage() {
                     <Text>{new Date(event.to).toLocaleTimeString()}</Text>
                   </Group>
                 </td>
-                <td>{event.limit}</td>
-                <td>{event.price}</td>
+                <td>{event.location.address}</td>
                 <td>{event.equipment}</td>
+                <td>$ {event.price}</td>
+                <td>{event.limit}</td>
                 {/* <td>{event.recurring.toString()}</td> */}
                 <td>
                   <Group spacing="xs">

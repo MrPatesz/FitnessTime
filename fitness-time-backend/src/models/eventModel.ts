@@ -72,7 +72,7 @@ export const initEvent = (sequelize: Sequelize) => {
         allowNull: true,
       },
       price: {
-        type: DataTypes.FLOAT,
+        type: DataTypes.INTEGER,
         allowNull: true,
       },
       equipment: {

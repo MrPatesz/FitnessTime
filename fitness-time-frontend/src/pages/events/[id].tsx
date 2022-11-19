@@ -35,7 +35,7 @@ export default function EventDetailsPage() {
         <Stack>
           <Group align={"start"} position={"apart"}>
             <Stack>
-              <Group align={"center"}>
+              <Group align={"end"}>
                 <Text weight="bold" size="xl">
                   {eventQuery.data?.name}
                 </Text>
@@ -44,14 +44,11 @@ export default function EventDetailsPage() {
                   as={`/users/${eventQuery.data?.owner?.id}`}
                   passHref
                 >
-                  <Text size="xl" component="a" sx={{ cursor: "pointer" }}>
-                    {eventQuery.data?.owner?.username}
+                  <Text size="lg" component="a" sx={{ cursor: "pointer" }}>
+                    by {eventQuery.data?.owner?.username}
                   </Text>
                 </Link>
               </Group>
-              {eventQuery.data?.description && (
-                <Text>{eventQuery.data?.description}</Text>
-              )}
               {eventQuery.data && (
                 <Group spacing="xs">
                   <Text>
@@ -66,13 +63,16 @@ export default function EventDetailsPage() {
                   </Text>
                 </Group>
               )}
+              {eventQuery.data?.description && (
+                <Text>{eventQuery.data?.description}</Text>
+              )}
               {eventQuery.data?.equipment && (
-                <Text color={"violet"}>
+                <Text weight={"bold"}>
                   {eventQuery.data?.equipment} shall be brought to the event!
                 </Text>
               )}
               {eventQuery.data?.price && (
-                <Text>Price: {eventQuery.data?.price}</Text>
+                <Text>Price: $ {eventQuery.data?.price}</Text>
               )}
             </Stack>
             {eventQuery.data && (
