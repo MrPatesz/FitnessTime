@@ -19,6 +19,7 @@ export const CreateEventDialog: React.FunctionComponent<{
     if (defaultStart && defaultEnd) {
       setEvent({ ...event, from: defaultStart, to: defaultEnd });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [defaultStart, defaultEnd]);
 
   return (
@@ -33,6 +34,7 @@ export const CreateEventDialog: React.FunctionComponent<{
         setEvent={setEvent}
         submitButton={
           <Button
+            disabled={!event.name || !event.location.address}
             onClick={() =>
               useCreate.mutateAsync(event).then(() => {
                 onClose();

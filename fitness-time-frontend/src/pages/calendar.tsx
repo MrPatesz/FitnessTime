@@ -30,6 +30,7 @@ export default function CalendarPage() {
           viewType="Week"
           timeFormat="Clock24Hours"
           headerDateFormat="MMMM d"
+          heightSpec="Full"
           onTimeRangeSelected={(event: {
             start: { value: string };
             end: { value: string };
@@ -92,7 +93,7 @@ export default function CalendarPage() {
           })}
         />
       </QueryComponent>
-      <Box sx={{ position: "absolute", left: -1, bottom: 0, zIndex: 999 }}>
+      <Box sx={{ position: "fixed", left: -1, bottom: 0, zIndex: 999 }}>
         <DayPilotNavigator
           theme={theme.colorScheme === "dark" ? "dark_navigator" : undefined}
           selectMode="week"

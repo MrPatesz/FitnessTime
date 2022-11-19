@@ -28,6 +28,8 @@ export const IntervalPicker: React.FunctionComponent<{
   return (
     <Group spacing="xs">
       <DatePicker
+        withAsterisk
+        sx={{ width: "230px" }}
         label="On"
         value={start}
         onChange={(newDate) => {
@@ -42,11 +44,13 @@ export const IntervalPicker: React.FunctionComponent<{
         minDate={new Date()}
       />
       <TimeInput
+        withAsterisk
         label="From"
         value={start}
         onChange={(event) => onChange(calculateDateTime(start, event), end)}
       />
       <TimeInput
+        withAsterisk
         label="To"
         value={end}
         onChange={(event) => onChange(start, calculateDateTime(end, event))}

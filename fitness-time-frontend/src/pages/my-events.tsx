@@ -1,13 +1,15 @@
-import { Affix, ActionIcon, Table } from "@mantine/core";
+import { Affix, ActionIcon, Table, Text, Group } from "@mantine/core";
 import React, { useState } from "react";
 import { QueryComponent } from "../components/QueryComponent";
 import EventService from "../services/EventService";
-import { IconPlus, IconTrash } from "@tabler/icons";
+import { IconPencil, IconPlus, IconTrash } from "@tabler/icons";
 import { CreateEventDialog } from "../components/event/CreateEventDialog";
 import { useRouter } from "next/router";
+import { EditEventDialog } from "../components/event/EditEventDialog";
 
 export default function MyEventsPage() {
   const [openCreate, setOpenCreate] = useState(false);
+  const [editId, setEditId] = useState<number | null>(null);
 
   const router = useRouter();
 
@@ -40,27 +42,47 @@ export default function MyEventsPage() {
                 style={{ cursor: "pointer" }}
               >
                 <td>{event.name}</td>
-                <td>{event.location}</td>
+                <td>{event.location.address}</td>
                 <td>{new Date(event.from).toLocaleDateString()}</td>
                 <td>
-                  {new Date(event.from).toLocaleTimeString()} -{" "}
-                  {new Date(event.to).toLocaleTimeString()}
+                  <Group spacing="xs">
+                    <Text>{new Date(event.from).toLocaleTimeString()}</Text>
+                    <Text>-</Text>
+                    <Text>{new Date(event.to).toLocaleTimeString()}</Text>
+                  </Group>
                 </td>
                 <td>{event.limit}</td>
                 <td>{event.price}</td>
                 <td>{event.equipment}</td>
                 {/* <td>{event.recurring.toString()}</td> */}
                 <td>
-                  <ActionIcon
-                    variant="filled"
-                    size="md"
-                    onClick={(e: any) => {
-                      e.stopPropagation();
-                      deleteEvent.mutate(event.id);
-                    }}
-                  >
-                    <IconTrash />
-                  </ActionIcon>
+                  <Group spacing="xs">
+                    <ActionIcon
+                      variant="filled"
+                      size="md"
+                      onClick={(e: any) => {
+                        e.stopPropagation();
+                        setEditId(event.id);
+                      }}
+                    >
+                      <IconPencil />
+                    </ActionIcon>
+                    <ActionIcon
+                      variant="filled"
+                      size="md"
+                      onClick={(e: any) => {
+                        e.stopPropagation();
+                        deleteEvent.mutate(event.id);
+                      }}
+                    >
+                      <IconTrash />
+                    </ActionIcon>
+                    <EditEventDialog
+                      open={editId === event.id}
+                      onClose={() => setEditId(null)}
+                      eventId={event.id}
+                    />
+                  </Group>
                 </td>
               </tr>
             ))}

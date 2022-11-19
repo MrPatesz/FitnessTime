@@ -1,4 +1,4 @@
-import { Loader } from "@mantine/core";
+import { Card, Loader } from "@mantine/core";
 import { UseQueryResult } from "@tanstack/react-query";
 import React, { useEffect } from "react";
 import DtoBase from "../models/dtoBase";
@@ -13,12 +13,12 @@ export const QueryComponent: React.FunctionComponent<{
     if (setState && query.data) {
       setState(query.data);
     }
-  }, [query.data]);
-  // TODO styling
+  }, [query.data, setState]);
+
   return (
     <>
       {query.error ? (
-        <div>An error occurred while fetching {resourceName}!</div>
+        <Card>An error occurred while fetching {resourceName}!</Card>
       ) : query.data ? (
         children
       ) : (

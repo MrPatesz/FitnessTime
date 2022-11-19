@@ -10,7 +10,7 @@ declare module "next-auth" {
   interface User extends UserBase {}
 
   interface Session {
-    user: UserBase;
+    user: User;
   }
 }
 
