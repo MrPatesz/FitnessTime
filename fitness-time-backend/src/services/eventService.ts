@@ -27,9 +27,24 @@ const getFeed = async (callerId: number): Promise<EventDto[]> => {
   const entities = await Event.findAll({
     where: { ownerId: { [Op.ne]: callerId } },
     include: [{ model: User, as: "owner" }],
-    order: [["name", "ASC"]],
+    order: [["from", "DESC"]],
   });
   return entities.map((e) => toEventDto(e, callerId));
+};
+
+const getCalendar = async (callerId: number): Promise<EventDto[]> => {
+  const entities = await Event.findAll({
+    include: [
+      { model: User, as: "owner" },
+      { model: User, as: "participants" },
+    ],
+  });
+  return entities
+    .filter(
+      (e) =>
+        e.ownerId === callerId || e.participants?.find((p) => p.id === callerId)
+    )
+    .map((e) => toEventDto(e, callerId));
 };
 
 const getSingle = async (
@@ -129,4 +144,5 @@ export default {
   participate,
   removeParticipation,
   getFeed,
+  getCalendar,
 };

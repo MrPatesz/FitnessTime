@@ -50,6 +50,19 @@ export default function EventService() {
     );
   };
 
+  const useGetCalendar = () => {
+    return useQuery<EventDto[]>(
+      [`${apiPostFix}_calendar`],
+      () =>
+        axios
+          .get<EventDto[]>(`${apiUrl}/calendar`, crudService.config)
+          .then((res) => res.data),
+      {
+        enabled: !!session,
+      }
+    );
+  };
+
   return {
     // not exposing: config, invalidateQueries
     useGetAll: crudService.useGetAll,
@@ -60,5 +73,6 @@ export default function EventService() {
     useParticipate,
     useGetAllOwned,
     useGetFeed,
+    useGetCalendar,
   };
 }

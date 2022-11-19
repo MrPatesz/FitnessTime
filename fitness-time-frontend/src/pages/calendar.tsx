@@ -17,7 +17,7 @@ export default function CalendarPage() {
   const [defaultEnd, setDefaultEnd] = useState(new Date());
 
   const eventService = EventService();
-  const eventsQuery = eventService.useGetAll(); // TODO getCalendarEvents
+  const eventsQuery = eventService.useGetCalendar();
   const updateEvent = eventService.useUpdate();
   const theme = useMantineTheme();
   const router = useRouter();

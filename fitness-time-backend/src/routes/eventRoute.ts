@@ -7,6 +7,8 @@ router.get("/owned", controller.getAllOwned);
 
 router.get("/feed", controller.getFeed);
 
+router.get("/calendar", controller.getCalendar);
+
 router.get("/", controller.getAll);
 
 router.get("/:id", controller.getSingle);

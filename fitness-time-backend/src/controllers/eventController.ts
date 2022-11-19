@@ -25,6 +25,12 @@ const getFeed = async (req: Request, res: Response) => {
   return res.status(200).json(events);
 };
 
+const getCalendar = async (req: Request, res: Response) => {
+  const callerId = getCallerId(req);
+  const events = await eventService.getCalendar(callerId);
+  return res.status(200).json(events);
+};
+
 const getSingle = async (req: Request, res: Response) => {
   const callerId = getCallerId(req);
   const id = getPathId(req);
@@ -105,4 +111,5 @@ export default {
   getAllOwned,
   participate,
   getFeed,
+  getCalendar,
 };
