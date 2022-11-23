@@ -26,7 +26,7 @@ export const LocationPicker: React.FunctionComponent<{
   return (
     <>
       {loadError ? (
-        <Card>An error occurred while loading places!</Card>
+        <Card withBorder>An error occurred while loading places!</Card>
       ) : isLoaded ? (
         <Autocomplete
           onLoad={(ac) => setAutocomplete(ac)}

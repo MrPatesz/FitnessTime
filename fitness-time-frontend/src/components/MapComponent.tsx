@@ -20,7 +20,7 @@ const MapComponent: React.FunctionComponent<{
   return (
     <>
       {loadError ? (
-        <Card>An error occurred while loading map!</Card>
+        <Card withBorder>An error occurred while loading map!</Card>
       ) : isLoaded ? (
         <GoogleMap
           mapContainerStyle={{

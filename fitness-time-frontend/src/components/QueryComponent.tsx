@@ -18,7 +18,7 @@ export const QueryComponent: React.FunctionComponent<{
   return (
     <>
       {query.error ? (
-        <Card>An error occurred while fetching {resourceName}!</Card>
+        <Card withBorder>An error occurred while fetching {resourceName}!</Card>
       ) : query.data ? (
         children
       ) : (

@@ -17,6 +17,7 @@ import { EditEventDialog } from "../../components/event/EditEventDialog";
 import { QueryComponent } from "../../components/QueryComponent";
 import EventService from "../../services/EventService";
 import MapComponent from "../../components/MapComponent";
+import { getIntervalString } from "../../util/utilFunctions";
 
 export default function EventDetailsPage() {
   const [openEdit, setOpenEdit] = useState(false);
@@ -28,6 +29,38 @@ export default function EventDetailsPage() {
   const eventService = EventService();
   const eventQuery = eventService.useGetSingle(id?.toString());
   const participate = eventService.useParticipate();
+
+  const participateButton = () => {
+    if (eventQuery.data?.ownedByCaller) {
+      return;
+    }
+
+    return eventQuery.data?.participants.find(
+      (p) => p.id === session?.user.userId
+    ) ? (
+      <Button
+        onClick={() =>
+          participate.mutate({
+            id: id?.toString(),
+            status: false,
+          })
+        }
+      >
+        Remove participation
+      </Button>
+    ) : (
+      <Button
+        onClick={() =>
+          participate.mutate({
+            id: id?.toString(),
+            status: true,
+          })
+        }
+      >
+        Participate
+      </Button>
+    );
+  };
 
   return (
     <>
@@ -55,11 +88,10 @@ export default function EventDetailsPage() {
                     {new Date(eventQuery.data.from).toLocaleDateString()}
                   </Text>
                   <Text>
-                    {new Date(eventQuery.data.from).toLocaleTimeString()}
-                  </Text>
-                  <Text>-</Text>
-                  <Text>
-                    {new Date(eventQuery.data.to).toLocaleTimeString()}
+                    {getIntervalString(
+                      eventQuery.data.from,
+                      eventQuery.data.to
+                    )}
                   </Text>
                 </Group>
               )}
@@ -79,17 +111,20 @@ export default function EventDetailsPage() {
               <MapComponent locationDto={eventQuery.data.location} />
             )}
           </Group>
-          <Card shadow="md" radius="md" p="lg">
+          <Card withBorder shadow="md" radius="md" p="lg">
             {eventQuery.data?.participants.length ? (
               <Stack>
-                <Group spacing={"xs"}>
-                  {eventQuery.data?.limit && (
-                    <Badge color={"red"}>
-                      {eventQuery.data?.participants.length}/
-                      {eventQuery.data?.limit}
-                    </Badge>
-                  )}
-                  <Text>They will also be there:</Text>
+                <Group position="apart">
+                  <Group spacing={"xs"}>
+                    {eventQuery.data?.limit && (
+                      <Badge color={"red"}>
+                        {eventQuery.data?.participants.length}/
+                        {eventQuery.data?.limit}
+                      </Badge>
+                    )}
+                    <Text>They will also be there:</Text>
+                  </Group>
+                  {participateButton()}
                 </Group>
                 <Group spacing="xs">
                   {eventQuery.data?.participants.map((p, index) => (
@@ -110,37 +145,20 @@ export default function EventDetailsPage() {
                 </Group>
               </Stack>
             ) : (
-              <Group spacing={"xs"}>
-                {eventQuery.data?.limit && (
-                  <Badge color={"red"}>
-                    {eventQuery.data?.participants.length}/
-                    {eventQuery.data?.limit}
-                  </Badge>
-                )}
-                <Text>There are no participants yet.</Text>
+              <Group position="apart">
+                <Group spacing={"xs"}>
+                  {eventQuery.data?.limit && (
+                    <Badge color={"red"}>
+                      {eventQuery.data?.participants.length}/
+                      {eventQuery.data?.limit}
+                    </Badge>
+                  )}
+                  <Text>There are no participants yet.</Text>
+                </Group>
+                {participateButton()}
               </Group>
             )}
           </Card>
-          {!eventQuery.data?.ownedByCaller &&
-            (eventQuery.data?.participants.find(
-              (p) => p.id === session?.user.userId
-            ) ? (
-              <Button
-                onClick={() =>
-                  participate.mutate({ id: id?.toString(), status: false })
-                }
-              >
-                Remove participation
-              </Button>
-            ) : (
-              <Button
-                onClick={() =>
-                  participate.mutate({ id: id?.toString(), status: true })
-                }
-              >
-                Participate
-              </Button>
-            ))}
         </Stack>
       </QueryComponent>
       {eventQuery.data?.ownedByCaller && (

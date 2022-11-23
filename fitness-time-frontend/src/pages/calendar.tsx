@@ -31,6 +31,8 @@ export default function CalendarPage() {
           timeFormat="Clock24Hours"
           headerDateFormat="MMMM d"
           heightSpec="Full"
+          eventMoveHandling="JavaScript"
+          eventResizeHandling="JavaScript"
           onTimeRangeSelected={(event: {
             start: { value: string };
             end: { value: string };

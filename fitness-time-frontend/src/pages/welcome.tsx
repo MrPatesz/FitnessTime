@@ -10,6 +10,7 @@ import {
   Group,
   Modal,
   Stack,
+  Card,
 } from "@mantine/core";
 import { IconKey, IconUser } from "@tabler/icons";
 import { showNotification } from "@mantine/notifications";
@@ -31,11 +32,13 @@ export default function WelcomePage() {
 
   return (
     <Stack align="center" justify="center" sx={{ height: "100vh" }}>
-      <h1>Welcome to Fitness Time!</h1>
-      <Group>
-        <Button onClick={() => setOpenCreate(true)}>Register</Button>
-        <Button onClick={goToLoginPage}>Login</Button>
-      </Group>
+      <Card withBorder>
+        <h1 style={{ marginTop: 0 }}>Welcome to Fitness Time!</h1>
+        <Group position="center">
+          <Button onClick={() => setOpenCreate(true)}>Register</Button>
+          <Button onClick={goToLoginPage}>Login</Button>
+        </Group>
+      </Card>
       <Modal
         opened={openCreate}
         onClose={() => setOpenCreate(false)}
@@ -44,7 +47,6 @@ export default function WelcomePage() {
       >
         <Stack>
           <TextInput
-            autoComplete="username"
             label="Username"
             placeholder="Username"
             value={username}
