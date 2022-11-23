@@ -1,14 +1,24 @@
 import { QueryComponent } from "../components/QueryComponent";
 import EventService from "../services/EventService";
-import {
-  DayPilotCalendar,
-  DayPilotNavigator,
-} from "@daypilot/daypilot-lite-react";
 import { useState } from "react";
 import { Box, useMantineTheme } from "@mantine/core";
 import dayjs from "dayjs";
 import { useRouter } from "next/router";
 import { CreateEventDialog } from "../components/event/CreateEventDialog";
+import dynamic from "next/dynamic";
+
+const DayPilotNavigator: any = dynamic(
+  () =>
+    import("@daypilot/daypilot-lite-react").then(
+      (mod) => mod.DayPilotNavigator
+    ),
+  { ssr: false }
+);
+const DayPilotCalendar: any = dynamic(
+  () =>
+    import("@daypilot/daypilot-lite-react").then((mod) => mod.DayPilotCalendar),
+  { ssr: false }
+);
 
 export default function CalendarPage() {
   const [startDate, setStartDate] = useState(new Date());
