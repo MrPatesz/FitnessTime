@@ -1,8 +1,14 @@
+import { showNotification } from "@mantine/notifications";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { useSession } from "next-auth/react";
 import EventDto from "../models/eventDto";
 import CrudServiceBase from "./CrudServiceBase";
+
+interface UpdateParticipationObject {
+  status: boolean;
+  id: number | string | undefined;
+}
 
 export default function EventService() {
   const { data: session } = useSession();
@@ -14,13 +20,22 @@ export default function EventService() {
   const useParticipate = () => {
     // TODO data: {eventId: id, status: true/false}
     return useMutation(
-      ({ status, id }: { status: boolean; id: number | string | undefined }) =>
+      ({ status, id }: UpdateParticipationObject) =>
         axios.post(
           `${apiUrl}/${id}/participate`,
           { status },
           crudService.config
         ),
-      { onSuccess: () => crudService.invalidateQueries() }
+      {
+        onSuccess: () => crudService.invalidateQueries(),
+        onError: (error: AxiosError, _variables: UpdateParticipationObject) => {
+          showNotification({
+            color: "red",
+            title: "Could not update participation!",
+            message: error.message,
+          });
+        },
+      }
     );
   };
 

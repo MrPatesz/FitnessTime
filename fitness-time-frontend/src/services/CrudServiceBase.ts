@@ -1,7 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import DtoBase from "../models/dtoBase";
 import { useSession } from "next-auth/react";
+import { showNotification } from "@mantine/notifications";
 
 export default function CrudServiceBase<R extends DtoBase>(apiPostFix: string) {
   const { data: session } = useSession();
@@ -46,6 +47,13 @@ export default function CrudServiceBase<R extends DtoBase>(apiPostFix: string) {
         axios.post<R>(apiUrl, newResource, config).then((res) => res.data),
       {
         onSuccess: () => invalidateQueries(),
+        onError: (error: AxiosError, _variables: R) => {
+          showNotification({
+            color: "red",
+            title: "Could not create resource!",
+            message: error.message,
+          });
+        },
       }
     );
   };
@@ -58,6 +66,13 @@ export default function CrudServiceBase<R extends DtoBase>(apiPostFix: string) {
           .then((res) => res.data),
       {
         onSuccess: () => invalidateQueries(),
+        onError: (error: AxiosError, _variables: R) => {
+          showNotification({
+            color: "red",
+            title: "Could not update resource!",
+            message: error.message,
+          });
+        },
       }
     );
   };
@@ -68,6 +83,13 @@ export default function CrudServiceBase<R extends DtoBase>(apiPostFix: string) {
         axios.delete(`${apiUrl}/${id}`, config),
       {
         onSuccess: () => invalidateQueries(),
+        onError: (error: AxiosError) => {
+          showNotification({
+            color: "red",
+            title: "Could not delete resource!",
+            message: error.message,
+          });
+        },
       }
     );
   };

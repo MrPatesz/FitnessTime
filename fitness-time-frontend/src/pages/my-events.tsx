@@ -9,11 +9,13 @@ import { EditEventDialog } from "../components/event/EditEventDialog";
 import { getIntervalString } from "../util/utilFunctions";
 import EventDto from "../models/eventDto";
 import { FilterEventsComponent } from "../components/event/FilterEventsComponent";
+import { ConfirmDialog } from "../components/ConfirmDialog";
 
 export default function MyEventsPage() {
   const [filteredList, setFilteredList] = useState<EventDto[]>([]);
   const [openCreate, setOpenCreate] = useState(false);
   const [editId, setEditId] = useState<number | null>(null);
+  const [deleteId, setDeleteId] = useState<number | null>(null);
 
   const router = useRouter();
 
@@ -76,7 +78,7 @@ export default function MyEventsPage() {
                         size="md"
                         onClick={(e: any) => {
                           e.stopPropagation();
-                          deleteEvent.mutate(event.id);
+                          setDeleteId(event.id);
                         }}
                       >
                         <IconTrash />
@@ -85,6 +87,12 @@ export default function MyEventsPage() {
                         open={editId === event.id}
                         onClose={() => setEditId(null)}
                         eventId={event.id}
+                      />
+                      <ConfirmDialog
+                        title={`Are you sure you want to delete this event: ${event.name}?`}
+                        open={deleteId === event.id}
+                        onClose={() => setDeleteId(null)}
+                        onConfirm={() => deleteEvent.mutate(event.id)}
                       />
                     </Group>
                   </td>
