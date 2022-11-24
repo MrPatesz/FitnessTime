@@ -1,7 +1,7 @@
 import { QueryComponent } from "../components/QueryComponent";
 import EventService from "../services/EventService";
 import { useState } from "react";
-import { Box, useMantineTheme } from "@mantine/core";
+import { Affix, useMantineTheme } from "@mantine/core";
 import dayjs from "dayjs";
 import { useRouter } from "next/router";
 import { CreateEventDialog } from "../components/event/CreateEventDialog";
@@ -105,13 +105,13 @@ export default function CalendarPage() {
           })}
         />
       </QueryComponent>
-      <Box sx={{ position: "fixed", left: -1, bottom: 0, zIndex: 999 }}>
+      <Affix position={{ bottom: 10, left: -1 }}>
         <DayPilotNavigator
           theme={theme.colorScheme === "dark" ? "dark_navigator" : undefined}
           selectMode="week"
           onTimeRangeSelected={(args: { day: Date }) => setStartDate(args.day)}
         />
-      </Box>
+      </Affix>
       <CreateEventDialog
         open={openCreate}
         onClose={() => setOpenCreate(false)}

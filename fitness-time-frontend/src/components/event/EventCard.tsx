@@ -9,7 +9,10 @@ export const EventCard: React.FunctionComponent<{
   return (
     <Card withBorder shadow="md" radius="md" p="lg">
       <Stack spacing="xs">
-        <Text weight="bold">{event.name}</Text>
+        <Group position="apart">
+          <Text weight="bold">{event.name}</Text>
+          <Badge>{new Date(event.from).toLocaleDateString()}</Badge>
+        </Group>
         <Group>
           {!event.price && (
             <Badge color="green" variant="light">
@@ -31,7 +34,6 @@ export const EventCard: React.FunctionComponent<{
               Recurring
             </Badge>
           )} */}
-          <Badge>{new Date(event.from).toLocaleDateString()}</Badge>
         </Group>
         <Text>{event.description}</Text>
         <Link href={"/events/[id]"} as={`/events/${event.id}`} passHref>
