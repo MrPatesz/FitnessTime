@@ -46,7 +46,14 @@ export default function CrudServiceBase<R extends DtoBase>(apiPostFix: string) {
       (newResource: R) =>
         axios.post<R>(apiUrl, newResource, config).then((res) => res.data),
       {
-        onSuccess: () => invalidateQueries(),
+        onSuccess: () => {
+          invalidateQueries();
+          showNotification({
+            color: "green",
+            title: "Created resource!",
+            message: "A new resource has been created.",
+          });
+        },
         onError: (error: AxiosError, _variables: R) => {
           showNotification({
             color: "red",
@@ -65,7 +72,14 @@ export default function CrudServiceBase<R extends DtoBase>(apiPostFix: string) {
           .put<R>(`${apiUrl}/${newResource.id}`, newResource, config)
           .then((res) => res.data),
       {
-        onSuccess: () => invalidateQueries(),
+        onSuccess: () => {
+          invalidateQueries();
+          showNotification({
+            color: "green",
+            title: "Updated resource!",
+            message: "The resource has been modified.",
+          });
+        },
         onError: (error: AxiosError, _variables: R) => {
           showNotification({
             color: "red",
@@ -82,7 +96,14 @@ export default function CrudServiceBase<R extends DtoBase>(apiPostFix: string) {
       (id: number | string | undefined) =>
         axios.delete(`${apiUrl}/${id}`, config),
       {
-        onSuccess: () => invalidateQueries(),
+        onSuccess: () => {
+          invalidateQueries();
+          showNotification({
+            color: "green",
+            title: "Deleted resource!",
+            message: "The resource has been deleted.",
+          });
+        },
         onError: (error: AxiosError) => {
           showNotification({
             color: "red",

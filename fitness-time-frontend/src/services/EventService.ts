@@ -27,7 +27,14 @@ export default function EventService() {
           crudService.config
         ),
       {
-        onSuccess: () => crudService.invalidateQueries(),
+        onSuccess: (_data, _variables) => {
+          crudService.invalidateQueries();
+          showNotification({
+            color: "green",
+            title: "Updated participation!",
+            message: "Your participation status has changed.",
+          });
+        },
         onError: (error: AxiosError, _variables: UpdateParticipationObject) => {
           showNotification({
             color: "red",

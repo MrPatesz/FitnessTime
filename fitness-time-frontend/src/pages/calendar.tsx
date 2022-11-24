@@ -105,7 +105,7 @@ export default function CalendarPage() {
           })}
         />
       </QueryComponent>
-      <Affix position={{ bottom: 10, left: -1 }}>
+      <Affix position={{ bottom: 0, left: -1 }}>
         <DayPilotNavigator
           theme={theme.colorScheme === "dark" ? "dark_navigator" : undefined}
           selectMode="week"
