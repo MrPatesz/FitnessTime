@@ -62,27 +62,37 @@ export default function EventDetailsPage() {
     );
   };
 
+  const limitBadge = () => {
+    if (eventQuery.data?.limit) {
+      return (
+        <Badge color={"red"}>
+          {eventQuery.data.participants.length}/{eventQuery.data.limit}
+        </Badge>
+      );
+    }
+  };
+
   return (
     <>
       <QueryComponent resourceName={"Event Details"} query={eventQuery}>
-        <Stack>
-          <Group align={"start"} position={"apart"}>
-            <Stack>
-              <Group align={"end"}>
-                <Text weight="bold" size="xl">
-                  {eventQuery.data?.name}
-                </Text>
-                <Link
-                  href={"/users/[id]"}
-                  as={`/users/${eventQuery.data?.owner?.id}`}
-                  passHref
-                >
-                  <Text size="lg" component="a" sx={{ cursor: "pointer" }}>
-                    by {eventQuery.data?.owner?.username}
+        {eventQuery.data && (
+          <Stack>
+            <Group align={"start"} position={"apart"}>
+              <Stack>
+                <Group align={"end"}>
+                  <Text weight="bold" size="xl">
+                    {eventQuery.data.name}
                   </Text>
-                </Link>
-              </Group>
-              {eventQuery.data && (
+                  <Link
+                    href={"/users/[id]"}
+                    as={`/users/${eventQuery.data.owner?.id}`}
+                    passHref
+                  >
+                    <Text size="lg" component="a" sx={{ cursor: "pointer" }}>
+                      by {eventQuery.data.owner?.username}
+                    </Text>
+                  </Link>
+                </Group>
                 <Group spacing="xs">
                   <Text>
                     {new Date(eventQuery.data.from).toLocaleDateString()}
@@ -94,72 +104,59 @@ export default function EventDetailsPage() {
                     )}
                   </Text>
                 </Group>
-              )}
-              {eventQuery.data?.description && (
-                <Text>{eventQuery.data?.description}</Text>
-              )}
-              {eventQuery.data?.equipment && (
-                <Text weight={"bold"}>
-                  {eventQuery.data?.equipment} shall be brought to the event!
-                </Text>
-              )}
-              {eventQuery.data?.price && (
-                <Text>Price: $ {eventQuery.data?.price}</Text>
-              )}
-            </Stack>
-            {eventQuery.data && (
+                {eventQuery.data.description && (
+                  <Text inherit>{eventQuery.data.description}</Text>
+                )}
+                {eventQuery.data.equipment && (
+                  <Text weight={"bold"}>
+                    {eventQuery.data.equipment} shall be brought to the event!
+                  </Text>
+                )}
+                {eventQuery.data.price && (
+                  <Text>Price: $ {eventQuery.data.price}</Text>
+                )}
+              </Stack>
               <MapComponent locationDto={eventQuery.data.location} />
-            )}
-          </Group>
-          <Card withBorder shadow="md" radius="md" p="lg">
-            {eventQuery.data?.participants.length ? (
-              <Stack>
+            </Group>
+            <Card withBorder shadow="md" radius="md" p="lg">
+              {eventQuery.data.participants.length ? (
+                <Stack>
+                  <Group position="apart">
+                    <Group spacing={"xs"}>
+                      {limitBadge()}
+                      <Text>They will also be there:</Text>
+                    </Group>
+                    {participateButton()}
+                  </Group>
+                  <Group spacing="xs">
+                    {eventQuery.data.participants.map((p, index) => (
+                      <Link
+                        key={p.id}
+                        href={"/users/[id]"}
+                        as={`/users/${p.id}`}
+                        passHref
+                      >
+                        <Text component="a" sx={{ cursor: "pointer" }}>
+                          {p.username}
+                          {index !==
+                            eventQuery.data.participants.length - 1 && <>,</>}
+                        </Text>
+                      </Link>
+                    ))}
+                  </Group>
+                </Stack>
+              ) : (
                 <Group position="apart">
                   <Group spacing={"xs"}>
-                    {eventQuery.data?.limit && (
-                      <Badge color={"red"}>
-                        {eventQuery.data?.participants.length}/
-                        {eventQuery.data?.limit}
-                      </Badge>
-                    )}
-                    <Text>They will also be there:</Text>
+                    {limitBadge()}
+                    <Text>There are no participants yet.</Text>
                   </Group>
                   {participateButton()}
                 </Group>
-                <Group spacing="xs">
-                  {eventQuery.data?.participants.map((p, index) => (
-                    <Link
-                      key={p.id}
-                      href={"/users/[id]"}
-                      as={`/users/${p.id}`}
-                      passHref
-                    >
-                      <Text component="a" sx={{ cursor: "pointer" }}>
-                        {p.username}
-                        {index !== eventQuery.data?.participants.length - 1 && (
-                          <>,</>
-                        )}
-                      </Text>
-                    </Link>
-                  ))}
-                </Group>
-              </Stack>
-            ) : (
-              <Group position="apart">
-                <Group spacing={"xs"}>
-                  {eventQuery.data?.limit && (
-                    <Badge color={"red"}>
-                      {eventQuery.data?.participants.length}/
-                      {eventQuery.data?.limit}
-                    </Badge>
-                  )}
-                  <Text>There are no participants yet.</Text>
-                </Group>
-                {participateButton()}
-              </Group>
-            )}
-          </Card>
-        </Stack>
+              )}
+            </Card>
+          </Stack>
+        )}
       </QueryComponent>
       {eventQuery.data?.ownedByCaller && (
         <>

@@ -6,7 +6,7 @@ import DtoBase from "../models/dtoBase";
 export const QueryComponent: React.FunctionComponent<{
   resourceName: string;
   query: UseQueryResult<DtoBase | DtoBase[], unknown>;
-  children: JSX.Element | JSX.Element[];
+  children: JSX.Element | JSX.Element[] | undefined;
   setState?: (newState: any) => void;
 }> = ({ resourceName, query, children, setState }) => {
   useEffect(() => {

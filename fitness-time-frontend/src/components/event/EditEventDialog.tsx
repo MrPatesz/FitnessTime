@@ -1,6 +1,6 @@
 import { Button, Modal } from "@mantine/core";
 import React, { useState } from "react";
-import EventDto, { defaultEventDto } from "../../models/eventDto";
+import EventDto from "../../models/eventDto";
 import EventService from "../../services/EventService";
 import { QueryComponent } from "../QueryComponent";
 import { EventForm } from "./EventForm";
@@ -10,7 +10,7 @@ export const EditEventDialog: React.FunctionComponent<{
   onClose: () => void;
   eventId: number;
 }> = ({ open, onClose, eventId }) => {
-  const [event, setEvent] = useState<EventDto>(defaultEventDto);
+  const [event, setEvent] = useState<EventDto | undefined>();
 
   const eventService = EventService();
   const useUpdate = eventService.useUpdate();
@@ -28,18 +28,20 @@ export const EditEventDialog: React.FunctionComponent<{
         query={eventQuery}
         setState={setEvent}
       >
-        <EventForm
-          event={event}
-          setEvent={setEvent}
-          submitButton={
-            <Button
-              disabled={!event.name || !event.location.address}
-              onClick={() => useUpdate.mutateAsync(event).then(onClose)}
-            >
-              Update
-            </Button>
-          }
-        />
+        {event && (
+          <EventForm
+            event={event}
+            setEvent={setEvent}
+            submitButton={
+              <Button
+                disabled={!event.name || !event.location.address}
+                onClick={() => useUpdate.mutateAsync(event).then(onClose)}
+              >
+                Update
+              </Button>
+            }
+          />
+        )}
       </QueryComponent>
     </Modal>
   );

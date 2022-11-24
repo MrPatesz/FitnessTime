@@ -14,23 +14,25 @@ export default function UserDetailsPage() {
 
   return (
     <QueryComponent resourceName={"User Details"} query={userDetailsQuery}>
-      <Stack>
-        <Text weight="bold" size="xl">
-          {userDetailsQuery.data?.username}
-        </Text>
-        <Text>{userDetailsQuery.data?.introduction}</Text>
-        {userDetailsQuery.data?.ownedEvents &&
-          userDetailsQuery.data.ownedEvents.length !== 0 && (
-            <>
-              <Text size="lg">Owned Events</Text>
-              <SimpleGrid cols={3}>
-                {userDetailsQuery.data.ownedEvents?.map((event) => (
-                  <EventCard event={event} key={event.id} />
-                ))}
-              </SimpleGrid>
-            </>
-          )}
-      </Stack>
+      {userDetailsQuery.data && (
+        <Stack>
+          <Text weight="bold" size="xl">
+            {userDetailsQuery.data.username}
+          </Text>
+          <Text>{userDetailsQuery.data.introduction}</Text>
+          {userDetailsQuery.data.ownedEvents &&
+            userDetailsQuery.data.ownedEvents.length !== 0 && (
+              <>
+                <Text size="lg">Owned Events</Text>
+                <SimpleGrid cols={3}>
+                  {userDetailsQuery.data.ownedEvents?.map((event) => (
+                    <EventCard event={event} key={event.id} />
+                  ))}
+                </SimpleGrid>
+              </>
+            )}
+        </Stack>
+      )}
     </QueryComponent>
   );
 }
