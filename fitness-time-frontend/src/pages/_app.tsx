@@ -1,8 +1,12 @@
 import "../styles/globals.css";
 import type { AppProps } from "next/app";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import {
+  QueryCache,
+  QueryClient,
+  QueryClientProvider,
+} from "@tanstack/react-query";
 import Head from "next/head";
-import { SessionProvider } from "next-auth/react";
+import { SessionProvider, signOut } from "next-auth/react";
 import { Session } from "next-auth";
 import { useState } from "react";
 import { MantineProvider, MantineThemeOverride } from "@mantine/core";
@@ -24,6 +28,13 @@ export default function App({
             retry: false,
           },
         },
+        queryCache: new QueryCache({
+          onError: async (error: any) => {
+            if (error.request.status === 401) {
+              signOut({ callbackUrl: "/welcome" });
+            }
+          },
+        }),
       })
   );
 
