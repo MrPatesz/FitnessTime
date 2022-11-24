@@ -47,6 +47,7 @@ export default function WelcomePage() {
       >
         <Stack>
           <TextInput
+            autoComplete="username"
             label="Username"
             placeholder="Username"
             value={username}

@@ -29,7 +29,7 @@ export const IntervalPicker: React.FunctionComponent<{
     <Group spacing="xs">
       <DatePicker
         withAsterisk
-        sx={{ width: "230px" }}
+        sx={{ width: "229px" }}
         label="On"
         value={start}
         onChange={(newDate) => {

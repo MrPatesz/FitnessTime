@@ -36,12 +36,12 @@ export const ApplicationShell: React.FunctionComponent<{
             { label: "My Events", route: "/my-events", icon: IconAdjustments },
             { label: "Users", route: "/users", icon: IconUsers },
           ].map((link) => (
-            <Link href={link.route} passHref key={link.label}>
+            <Link href={link.route} as={link.route} passHref key={link.label}>
               <NavLink
                 component="a"
                 label={link.label}
                 icon={<link.icon size={16} />}
-                active={router.route === link.route}
+                active={router.route.includes(link.route)}
               />
             </Link>
           ))}

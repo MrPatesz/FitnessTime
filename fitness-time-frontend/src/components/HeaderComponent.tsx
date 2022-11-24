@@ -11,7 +11,7 @@ export const HeaderComponent: React.FunctionComponent<{
       <Title order={2}>Fitness Time</Title>
 
       <Group>
-        <Link href="/profile">
+        <Link href="/profile" as="/profile" passHref>
           <Text
             component="a"
             sx={{ cursor: "pointer" }}
