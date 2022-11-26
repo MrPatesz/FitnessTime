@@ -66,7 +66,7 @@ const update = async (req: Request, res: Response) => {
   if (result) {
     return res.status(200).json(result);
   } else {
-    return res.status(404).send();
+    return res.status(400).send();
   }
 };
 
@@ -79,7 +79,7 @@ const deleteSingle = async (req: Request, res: Response) => {
   if (result) {
     return res.status(200).send();
   } else {
-    return res.status(404).send();
+    return res.status(400).send();
   }
 };
 
