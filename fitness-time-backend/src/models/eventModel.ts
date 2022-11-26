@@ -12,7 +12,7 @@ export class Event extends Model {
   address: string;
   from: Date;
   to: Date;
-  recurring: boolean;
+  // recurring: boolean;
   description: string | null;
   limit: number | null;
   price: number | null;
@@ -57,10 +57,10 @@ export const initEvent = (sequelize: Sequelize) => {
         type: DataTypes.DATE,
         allowNull: false,
       },
-      recurring: {
+      /* recurring: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
-      },
+      }, */
 
       // NULLABLE properties
       description: {

@@ -9,7 +9,7 @@ export default interface EventDto extends DtoBase {
   location: LocationDto;
   from: Date;
   to: Date;
-  recurring: boolean;
+  // recurring: boolean;
   description: string | null;
   limit: number | null;
   price: number | null;
@@ -30,7 +30,7 @@ export const defaultEventDto: EventDto = {
   },
   from: new Date(),
   to: new Date(),
-  recurring: false,
+  // recurring: false,
   description: null,
   limit: null,
   price: null,

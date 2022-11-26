@@ -28,7 +28,7 @@ export const addSeedData = (sequelize: Sequelize) => {
         address: "4% Fitness GYM",
         from: new Date(),
         to: new Date(),
-        recurring: true,
+        // recurring: true,
       });
     })
     .then(async (event) => {
