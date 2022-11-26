@@ -6,6 +6,7 @@ import dayjs from "dayjs";
 import { useRouter } from "next/router";
 import { CreateEventDialog } from "../components/event/CreateEventDialog";
 import dynamic from "next/dynamic";
+import { showNotification } from "@mantine/notifications";
 
 const DayPilotNavigator: any = dynamic(
   () =>
@@ -56,11 +57,19 @@ export default function CalendarPage() {
             newStart: { value: string };
             newEnd: { value: string };
           }) => {
-            updateEvent.mutate({
-              ...event.e.data.resource,
-              from: new Date(event.newStart.value),
-              to: new Date(event.newEnd.value),
-            });
+            if (event.e.data.resource.ownedByCaller) {
+              updateEvent.mutate({
+                ...event.e.data.resource,
+                from: new Date(event.newStart.value),
+                to: new Date(event.newEnd.value),
+              });
+            } else {
+              showNotification({
+                color: "red",
+                title: "Could not update event!",
+                message: "You do not own this event!",
+              });
+            }
           }}
           onEventMove={(event: {
             e: any;
@@ -71,11 +80,19 @@ export default function CalendarPage() {
             ctrl: boolean;
             shift: boolean;
           }) => {
-            updateEvent.mutate({
-              ...event.e.data.resource,
-              from: new Date(event.newStart.value),
-              to: new Date(event.newEnd.value),
-            });
+            if (event.e.data.resource.ownedByCaller) {
+              updateEvent.mutate({
+                ...event.e.data.resource,
+                from: new Date(event.newStart.value),
+                to: new Date(event.newEnd.value),
+              });
+            } else {
+              showNotification({
+                color: "red",
+                title: "Could not update event!",
+                message: "You do not own this event!",
+              });
+            }
           }}
           durationBarVisible={false}
           businessBeginsHour={8}
