@@ -1,35 +1,31 @@
 import { Text, Stack, Card, Group, TextInput, ActionIcon } from "@mantine/core";
 import { IconArrowDown, IconArrowUp, IconSearch } from "@tabler/icons";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { QueryComponent } from "../../components/QueryComponent";
-import UserDto from "../../models/userDto";
 import UserService from "../../services/UserService";
 
 export default function UsersPage() {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [ascending, setAscending] = useState<boolean>(true);
-  const [filteredList, setFilteredList] = useState<UserDto[]>([]);
 
   const userService = UserService();
   const usersQuery = userService.useGetAll();
 
-  useEffect(() => {
-    if (usersQuery.data) {
-      setFilteredList(
-        usersQuery.data
-          ?.filter((a) =>
-            a.username.toLowerCase().includes(searchTerm.toLowerCase())
-          )
-          ?.sort((a, b) => {
-            let returnValue = a.username.localeCompare(b.username);
-            if (!ascending) {
-              returnValue *= -1;
-            }
-            return returnValue;
-          })
-      );
-    }
+  const filteredList = useMemo(() => {
+    if (!usersQuery.data) return [];
+
+    return usersQuery.data
+      ?.filter((a) =>
+        a.username.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+      ?.sort((a, b) => {
+        let result = a.username.localeCompare(b.username);
+        if (!ascending) {
+          result *= -1;
+        }
+        return result;
+      });
   }, [searchTerm, ascending, usersQuery.data]);
 
   return (

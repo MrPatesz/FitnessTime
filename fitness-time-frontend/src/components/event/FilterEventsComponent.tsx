@@ -66,34 +66,32 @@ export const FilterEventsComponent: React.FunctionComponent<{
         })
         ?.filter((a) => a.name.toLowerCase().includes(searchTerm.toLowerCase()))
         ?.sort((a, b) => {
-          let returnValue = 0;
+          let result = 0;
           switch (orderBy) {
             case OrderBy[OrderBy.NAME]: {
-              returnValue = a.name.localeCompare(b.name);
+              result = a.name.localeCompare(b.name);
               break;
             }
             case OrderBy[OrderBy.DATE]: {
-              returnValue =
-                new Date(a.from).getTime() - new Date(b.from).getTime();
+              result = new Date(a.from).getTime() - new Date(b.from).getTime();
               break;
             }
             case OrderBy[OrderBy.LOCATION]: {
-              returnValue = a.location.address.localeCompare(
-                b.location.address
-              );
+              result = a.location.address.localeCompare(b.location.address);
               break;
             }
             case OrderBy[OrderBy.PRICE]: {
-              returnValue = (a.price ?? 0) - (b.price ?? 0);
+              result = (a.price ?? 0) - (b.price ?? 0);
               break;
             }
           }
           if (!ascending) {
-            returnValue *= -1;
+            result *= -1;
           }
-          return returnValue;
+          return result;
         })
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [events, searchTerm, tags, orderBy, ascending]);
 
   return (
