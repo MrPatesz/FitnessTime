@@ -33,18 +33,19 @@ const getFeed = async (callerId: number): Promise<EventDto[]> => {
 };
 
 const getCalendar = async (callerId: number): Promise<EventDto[]> => {
-  const entities = await Event.findAll({
+  const callerUser = await User.findByPk(callerId, {
     include: [
-      { model: User, as: "owner" },
-      { model: User, as: "participants" },
+      { model: Event, as: "ownedEvents" },
+      { model: Event, as: "participatedEvents" },
     ],
   });
-  return entities
-    .filter(
-      (e) =>
-        e.ownerId === callerId || e.participants?.find((p) => p.id === callerId)
-    )
-    .map((e) => toEventDto(e, callerId));
+
+  const ownedEvents = callerUser?.ownedEvents ?? [];
+  const participatedEvents = callerUser?.participatedEvents ?? [];
+
+  return [...ownedEvents, ...participatedEvents].map((e) =>
+    toEventDto(e, callerId)
+  );
 };
 
 const getSingle = async (

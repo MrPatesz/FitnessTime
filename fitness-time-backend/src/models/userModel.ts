@@ -8,6 +8,7 @@ export class User extends Model {
   passwordHash: string;
   introduction: string | null;
   ownedEvents?: Event[];
+  participatedEvents?: Event[];
 }
 
 export const initUser = (sequelize: Sequelize) => {
