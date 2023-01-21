@@ -40,12 +40,10 @@ const getCalendar = async (callerId: number): Promise<EventDto[]> => {
     ],
   });
 
-  const ownedEvents = callerUser?.ownedEvents ?? [];
-  const participatedEvents = callerUser?.participatedEvents ?? [];
-
-  return [...ownedEvents, ...participatedEvents].map((e) =>
-    toEventDto(e, callerId)
-  );
+  return [
+    ...(callerUser?.ownedEvents ?? []),
+    ...(callerUser?.participatedEvents ?? []),
+  ].map((e) => toEventDto(e, callerId));
 };
 
 const getSingle = async (
