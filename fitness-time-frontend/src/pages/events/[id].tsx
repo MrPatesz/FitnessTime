@@ -88,7 +88,7 @@ export default function EventDetailsPage() {
                     as={`/users/${eventQuery.data.owner?.id}`}
                     passHref
                   >
-                    <Text size="lg" component="a" sx={{ cursor: "pointer" }}>
+                    <Text size="lg" sx={{ cursor: "pointer" }}>
                       by {eventQuery.data.owner?.username}
                     </Text>
                   </Link>
@@ -136,7 +136,7 @@ export default function EventDetailsPage() {
                         as={`/users/${p.id}`}
                         passHref
                       >
-                        <Text component="a" sx={{ cursor: "pointer" }}>
+                        <Text sx={{ cursor: "pointer" }}>
                           {p.username}
                           {index !==
                             eventQuery.data.participants.length - 1 && <>,</>}

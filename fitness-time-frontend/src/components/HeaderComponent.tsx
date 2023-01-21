@@ -12,12 +12,7 @@ export const HeaderComponent: React.FunctionComponent<{
 
       <Group>
         <Link href="/profile" as="/profile" passHref>
-          <Text
-            component="a"
-            sx={{ cursor: "pointer" }}
-            size="lg"
-            weight="bold"
-          >
+          <Text sx={{ cursor: "pointer" }} size="lg" weight="bold">
             {username}
           </Text>
         </Link>

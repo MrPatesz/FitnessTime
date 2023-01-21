@@ -59,7 +59,7 @@ export default function UsersPage() {
               as={`/users/${user.id}`}
               passHref
             >
-              <Card component="a" withBorder>
+              <Card withBorder>
                 <Text sx={{ cursor: "pointer" }}>{user.username}</Text>
               </Card>
             </Link>

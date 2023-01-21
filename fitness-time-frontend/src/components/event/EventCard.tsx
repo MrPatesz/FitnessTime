@@ -37,7 +37,7 @@ export const EventCard: React.FunctionComponent<{
         </Group>
         <Text>{event.description}</Text>
         <Link href={"/events/[id]"} as={`/events/${event.id}`} passHref>
-          <Button component="a">Details</Button>
+          <Button>Details</Button>
         </Link>
       </Stack>
     </Card>
