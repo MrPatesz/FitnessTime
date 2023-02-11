@@ -36,7 +36,13 @@ export const ApplicationShell: React.FunctionComponent<{
             { label: "My Events", route: "/my-events", icon: IconAdjustments },
             { label: "Users", route: "/users", icon: IconUsers },
           ].map((link) => (
-            <Link href={link.route} as={link.route} passHref key={link.label}>
+            <Link
+              href={link.route}
+              as={link.route}
+              passHref
+              key={link.label}
+              style={{ textDecoration: "none" }}
+            >
               <NavLink
                 label={link.label}
                 icon={<link.icon size={16} />}

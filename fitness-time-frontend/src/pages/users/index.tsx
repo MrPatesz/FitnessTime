@@ -58,6 +58,7 @@ export default function UsersPage() {
               href={"/users/[id]"}
               as={`/users/${user.id}`}
               passHref
+              style={{ textDecoration: "none" }}
             >
               <Card withBorder>
                 <Text sx={{ cursor: "pointer" }}>{user.username}</Text>
